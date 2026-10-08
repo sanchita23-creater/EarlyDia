@@ -1,0 +1,114 @@
+{
+  "production_model": {
+    "label": "Production model (locked) - final test metrics, unchanged",
+    "women": {
+      "n": 86669,
+      "n_positive": 2630,
+      "prevalence": 0.030345336856315408,
+      "roc_auc": 0.6850735266538617,
+      "pr_auc": 0.08347768366548458,
+      "sensitivity": 0.7619771863117871,
+      "specificity": 0.4796820523804424,
+      "ppv_precision": 0.043821477772189546,
+      "npv": 0.9847085837119547,
+      "brier_score": 0.028684819068421376,
+      "calibration_slope": 1.0225863753530275,
+      "calibration_intercept": 0.011592774814609564,
+      "threshold": 0.026,
+      "calibration": "isotonic",
+      "model": "HistGradientBoosting"
+    },
+    "men": {
+      "n": 11408,
+      "n_positive": 377,
+      "prevalence": 0.033046984572230015,
+      "roc_auc": 0.6649502595410521,
+      "pr_auc": 0.07192728529461416,
+      "sensitivity": 0.7559681697612732,
+      "specificity": 0.45399329163267155,
+      "ppv_precision": 0.045180722891566265,
+      "npv": 0.9819607843137255,
+      "brier_score": 0.0315258610173612,
+      "calibration_slope": 0.9522333399626626,
+      "calibration_intercept": -0.27564085733107585,
+      "threshold": 0.027,
+      "calibration": "sigmoid",
+      "model": "HistGradientBoosting"
+    }
+  },
+  "age_subgroups_locked_threshold": {
+    "women": {
+      "age_18_29": {
+        "n": 48133,
+        "prevalence": 0.019279911910747304,
+        "roc_auc": 0.6214445704538897,
+        "sensitivity": 0.46120689655172414,
+        "specificity": 0.7279525473996399
+      },
+      "age_30_40": {
+        "n": 38536,
+        "prevalence": 0.044166493668258255,
+        "roc_auc": 0.6673682932420725,
+        "sensitivity": 0.9259694477085781,
+        "specificity": 0.1615083889884346
+      }
+    },
+    "men": {
+      "age_18_29": {
+        "n": 6390,
+        "prevalence": 0.02003129890453834,
+        "roc_auc": 0.574869375798467,
+        "sensitivity": 0.390625,
+        "specificity": 0.7328329607154264
+      },
+      "age_30_40": {
+        "n": 5018,
+        "prevalence": 0.04962136309286568,
+        "roc_auc": 0.6177079885909753,
+        "sensitivity": 0.9437751004016064,
+        "specificity": 0.08785908995596561
+      }
+    }
+  },
+  "key_finding": "Overall sensitivity (~0.76) hides large age heterogeneity at the locked threshold: ages 18-29 sensitivity is ~0.46 (women) / ~0.39 (men) versus ~0.93 / ~0.94 at ages 30-40, reflecting the pooled threshold applied to a population whose predicted risks differ with age. No subgroup-specific thresholds were created.",
+  "analysis_status": {
+    "target_sensitivity": "DONE - full replication NOT possible from retained extraction",
+    "calibration": "DONE (from locked reliability table)",
+    "decision_curve": "DONE - exact at locked threshold; curve APPROXIMATE (decile bins)",
+    "subgroups_age_sex": "DONE (locked report)",
+    "baseline_comparison": "DONE - recorded grouped-CV values, not recomputed",
+    "idrs": "COMPATIBILITY ONLY - IDRS not reproducible (3/4 components missing)",
+    "feature_importance": "DONE (permutation importance, not SHAP)",
+    "survey_weighted_prevalence": "NOT RUN - needs data/processed (code ready: src/research/survey_analysis.py)",
+    "state_holdout": "NOT RUN - needs row-level data (code ready)",
+    "mapper_tda_stability_null": "NOT RUN on real data - needs row-level training data (code ready, unit-tested on synthetic data only)",
+    "residence_education_subgroups": "NOT RUN - needs row-level data",
+    "roc_pr_curves": "NOT GENERATED - need row-level predictions"
+  },
+  "claim_boundaries": {
+    "established_by_this_project": [
+      "production model performance on the locked test set",
+      "calibration (reliability table, slope, intercept, Brier)",
+      "cluster-aware validation design",
+      "observed age-subgroup performance",
+      "observed error patterns"
+    ],
+    "exploratory": [
+      "Mapper communities",
+      "TDA structures",
+      "subgroup patterns",
+      "null-model comparisons",
+      "feature-space heterogeneity"
+    ],
+    "not_established": [
+      "clinical diagnosis",
+      "future diabetes prediction",
+      "causality",
+      "biological diabetes subtypes",
+      "clinical utility",
+      "prospective validity",
+      "external validity"
+    ]
+  },
+  "positioning": "EarlyDia is a leakage-aware, cluster-aware, calibrated, sensitivity-oriented screening research prototype using NFHS-5 data, with explicit target-definition limitations, subgroup/error analysis, survey-aware descriptive analysis, decision-curve evaluation, and exploratory topological feature-space analysis."
+}

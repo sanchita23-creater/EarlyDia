@@ -1,0 +1,12 @@
+# EarlyDia - Streamlit base configuration. Light/dark switching is handled in-app
+# (sidebar toggle) via src/app/theme.py; base is fixed to "light" so the in-app dark
+# overrides always start from a known surface.
+[theme]
+base = "light"
+primaryColor = "#1C4E9C"
+backgroundColor = "#F5F7FA"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#0B0C0E"
+
+[browser]
+gatherUsageStats = false

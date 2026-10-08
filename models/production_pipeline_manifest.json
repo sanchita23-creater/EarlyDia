@@ -1,0 +1,14 @@
+{
+  "women_pipeline": "models/women_production_pipeline.pkl",
+  "men_pipeline": "models/men_production_pipeline.pkl",
+  "note": "Base model refit on FULL training data; calibrator fit on OOF (out-of-fold) training predictions only, per standard nested calibration practice. Final test sets (women_test.pkl, men_test.pkl) were NOT accessed at any point in this stage.",
+  "seed": 42,
+  "final_thresholds": {
+    "women": 0.026,
+    "men": 0.027
+  },
+  "models": {
+    "women": "HistGradientBoosting + isotonic calibration",
+    "men": "HistGradientBoosting + sigmoid calibration"
+  }
+}

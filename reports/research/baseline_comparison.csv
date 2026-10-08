@@ -1,0 +1,7 @@
+sex,model,oof_roc_auc,oof_pr_auc,validation,source,note
+women,HistGradientBoosting (production),0.6816,0.0924,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),
+women,LogisticRegression,0.6788,0.0756,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),
+women,RandomForest,0.643,0.068,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),
+men,HistGradientBoosting (production),0.6673,0.0848,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),
+men,LogisticRegression,0.6788,0.0762,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),"Men: LR has higher OOF ROC-AUC, HGB higher PR-AUC and better calibration slope - recorded as a judgment call in the source. The LR OOF ROC-AUC value 0.6788 is identical for women and men in the source file; verify against grouped_cv outputs before publication."
+men,RandomForest,0.636,0.067,"StratifiedGroupKFold(5), PSU groups",configs/model_selection.json (original grouped CV on training data; not recomputed),

@@ -1,0 +1,197 @@
+{
+  "random_seed": 42,
+  "population": {
+    "women": "Age 18-40 inclusive, pregnant women excluded (v213==1). Final N=434,502 usable Target A rows.",
+    "men": "Age 18-40 inclusive. mv213 (partner pregnancy) explicitly NOT used for exclusion. Final N=56,092 usable Target A rows."
+  },
+  "target_definition": {
+    "name": "Target A (locked, research-defined)",
+    "known_diabetes_flag": "K = (sb56==1) OR (sb57==1) OR (s728a==1) [men: smb56/smb57/sm627a]",
+    "positive_rule": "K OR (valid glucose AND glucose>=200 mg/dL)",
+    "negative_rule": "all three flags explicitly No AND valid glucose AND glucose<=140 mg/dL",
+    "excluded": "no valid glucose + no known flag; glucose 141-199 + no known flag; any flag blank/dont-know rather than explicit No",
+    "validated_against": "women POS=13839 NEG=420663 (post-pregnancy-exclusion), exact match to locked benchmark"
+  },
+  "predictor_list": {
+    "women_feature_cols": [
+      "age",
+      "avg_systolic_bp",
+      "avg_diastolic_bp",
+      "n_valid_systolic_readings",
+      "n_valid_diastolic_readings",
+      "bmi",
+      "alc_duration_years",
+      "alc_frequency",
+      "tob_v463a",
+      "tob_v463b",
+      "tob_v463c",
+      "tob_v463d",
+      "tob_v463f",
+      "tob_v463g",
+      "tob_v463j",
+      "tob_v463k",
+      "tob_v463l",
+      "tob_v463x",
+      "tob_v463z",
+      "tob_v463aa",
+      "alc_s722a",
+      "alc_s722b",
+      "alc_s722c",
+      "alc_s722d",
+      "alc_s722e",
+      "alc_s722x",
+      "diet_s731a",
+      "diet_s731b",
+      "diet_s731c",
+      "diet_s731d",
+      "diet_s731e",
+      "diet_s731f",
+      "diet_s731g",
+      "diet_s731h",
+      "diet_s731i",
+      "alc_drinks",
+      "education",
+      "residence"
+    ],
+    "men_feature_cols": [
+      "age",
+      "avg_systolic_bp",
+      "avg_diastolic_bp",
+      "n_valid_systolic_readings",
+      "n_valid_diastolic_readings",
+      "alc_duration_years",
+      "alc_frequency",
+      "tob_mv463a",
+      "tob_mv463b",
+      "tob_mv463c",
+      "tob_mv463d",
+      "tob_mv463f",
+      "tob_mv463g",
+      "tob_mv463x",
+      "tob_mv463z",
+      "alc_sm621a",
+      "alc_sm621b",
+      "alc_sm621c",
+      "alc_sm621d",
+      "alc_sm621e",
+      "alc_sm621x",
+      "diet_sm630a",
+      "diet_sm630b",
+      "diet_sm630c",
+      "diet_sm630d",
+      "diet_sm630e",
+      "diet_sm630f",
+      "diet_sm630g",
+      "diet_sm630h",
+      "diet_sm630i",
+      "alc_drinks",
+      "education",
+      "residence"
+    ]
+  },
+  "train_test_split": {
+    "method": "GroupShuffleSplit, group=PSU (v021/mv021), test_size=0.20",
+    "seed_selection": "deterministic search from seed=42 upward until train/test target prevalence within +/-15% relative tolerance; seed=42 satisfied on first try for both sexes",
+    "psu_disjointness": "verified zero overlap between train/test PSUs for both sexes"
+  },
+  "grouped_cv": {
+    "method": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)",
+    "group_column": "v021_psu (women) / mv021_psu (men)",
+    "psu_disjointness_per_fold": "asserted programmatically on every fold"
+  },
+  "model_comparison": "Logistic Regression, Random Forest, HistGradientBoosting compared via grouped CV (ROC-AUC, PR-AUC primary; RF excluded from further stages - weakest on both metrics for both sexes)",
+  "selected_models": {
+    "women": {
+      "model": "HistGradientBoosting",
+      "class_weight": "balanced",
+      "calibration_method": "isotonic"
+    },
+    "men": {
+      "model": "HistGradientBoosting",
+      "class_weight": "balanced",
+      "calibration_method": "sigmoid"
+    }
+  },
+  "calibration": {
+    "method_selection": "sigmoid vs isotonic compared via nested grouped 5-fold CV on OOF predictions only; isotonic won for women, sigmoid won for men",
+    "women_calibrated_oof_brier": 0.0304,
+    "men_calibrated_oof_brier": 0.0349
+  },
+  "thresholds_LOCKED": {
+    "women": 0.026,
+    "men": 0.027,
+    "selection_rule": "Highest threshold (0.001-step grid) on the calibrated grouped-OOF training predictions whose sensitivity is still >= 0.75. A documented SCREENING-THRESHOLD CHOICE reflecting a sensitivity/specificity trade-off, not a clinically optimal or universally correct threshold.",
+    "single_source_of_truth": "the 'selected_threshold' stored in models/{women,men}_production_pipeline.pkl; configs/config.py DOCUMENTED_THRESHOLDS and this manifest mirror it and tests assert they agree",
+    "provenance_note": "The threshold is a decision rule applied to calibrated probabilities; it does not enter model or calibrator fitting. The fitted model and calibrator objects are unchanged, and the stored threshold value was set to the locked value after the threshold-review stage. src/models/final_refit.py now reads the locked value from configs/config.py."
+  },
+  "final_test_evaluation": {
+    "status": "LOCKED - see reports/final_evaluation/final_test_evaluation.json",
+    "women_test_n": 86669,
+    "men_test_n": 11408,
+    "women_roc_auc": 0.685,
+    "men_roc_auc": 0.665,
+    "note": "Test sets evaluated exactly once, after model/calibration/threshold were fully locked using training/OOF data only."
+  },
+  "known_environment_limitations": [
+    "SHAP package unavailable (no network access in this session) - permutation importance used as a documented, clearly-labeled substitute for global feature importance, NOT presented as SHAP",
+    "pandas pure-Python Stata reader (not pyreadstat) required chunked reading for the large women raw file due to container memory limits - raw data no longer present in this project (never committed)"
+  ],
+  "pipeline_stages_in_order": [
+    {
+      "stage": 0,
+      "script": "src/data/extract_nfhs.py",
+      "purpose": "raw NFHS-5 .DTA -> slim interim datasets (only the required variables); see docs/DATA_REPRODUCTION.md"
+    },
+    {
+      "stage": 1,
+      "script": "src/target/women_target_construction.py, src/target/men_target_construction.py",
+      "purpose": "Target A + exclusion_reason_final (validated to locked benchmark counts)"
+    },
+    {
+      "stage": 2,
+      "script": "src/features/predictor_construction.py",
+      "purpose": "predictor matrices (pregnancy exclusion applied; BP/BMI/duration recodes)"
+    },
+    {
+      "stage": 3,
+      "script": "src/validation/predictor_qc.py",
+      "purpose": "quality + leakage assertions"
+    },
+    {
+      "stage": 4,
+      "script": "src/validation/train_test_split.py",
+      "purpose": "PSU-disjoint 80/20 split"
+    },
+    {
+      "stage": 5,
+      "script": "src/models/grouped_cv_baseline.py",
+      "purpose": "LR/RF/HGB grouped-CV comparison (training data only)"
+    },
+    {
+      "stage": 6,
+      "script": "src/models/oof_generation.py, src/calibration/calibration_comparison.py",
+      "purpose": "grouped OOF predictions + sigmoid-vs-isotonic comparison"
+    },
+    {
+      "stage": 7,
+      "script": "src/calibration/threshold_selection.py, src/calibration/threshold_review.py",
+      "purpose": "calibrated-OOF threshold tables; final rule = highest 0.001-grid threshold with sensitivity >= 0.75 (reproduces 0.026 / 0.027)"
+    },
+    {
+      "stage": 8,
+      "script": "src/models/final_refit.py",
+      "purpose": "refit on full training data; save production pipeline with the locked thresholds (read from configs/config.py)"
+    },
+    {
+      "stage": 9,
+      "script": "src/evaluation/final_test_evaluation.py",
+      "purpose": "single evaluation on untouched test sets"
+    },
+    {
+      "stage": 10,
+      "script": "src/explainability/explainability.py",
+      "purpose": "permutation importance (NOT SHAP) + LR reference coefficients, computed on training data"
+    }
+  ],
+  "pipeline_scripts_note": "Scripts are the as-run pipeline with paths resolved through configs/config.py. Re-running them requires the licensed NFHS-5 raw files in data/raw/ (not distributed) and regenerates data/interim/ and data/processed/. The frozen results live in models/, configs/ and reports/; those files, not a re-run, are the record of the locked results."
+}

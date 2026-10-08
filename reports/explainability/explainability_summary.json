@@ -1,0 +1,218 @@
+{
+  "women": {
+    "method_note": "Permutation importance (sklearn, model-agnostic, scoring=ROC-AUC) computed for the selected HGB production pipeline. This is NOT SHAP - shap package unavailable in this environment (no network access to install). LR coefficients are a separate interpretable reference model, refit on full training data for this purpose only, NOT the production model.",
+    "top_10_permutation_importance": [
+      {
+        "feature": "age",
+        "importance_mean": 0.0733106571828594,
+        "importance_std": 0.0092232962551628
+      },
+      {
+        "feature": "bmi",
+        "importance_mean": 0.0562387791944962,
+        "importance_std": 0.0045615022553814
+      },
+      {
+        "feature": "diet_s731f",
+        "importance_mean": 0.024048052288053,
+        "importance_std": 0.0020937796112376
+      },
+      {
+        "feature": "avg_systolic_bp",
+        "importance_mean": 0.0210909180760485,
+        "importance_std": 0.0023424240499411
+      },
+      {
+        "feature": "avg_diastolic_bp",
+        "importance_mean": 0.0143431659901165,
+        "importance_std": 0.0013152334042131
+      },
+      {
+        "feature": "diet_s731a",
+        "importance_mean": 0.0074150447844861,
+        "importance_std": 0.000700006675401
+      },
+      {
+        "feature": "diet_s731d",
+        "importance_mean": 0.0072051758305479,
+        "importance_std": 0.0011269221158919
+      },
+      {
+        "feature": "diet_s731h",
+        "importance_mean": 0.0069974730188097,
+        "importance_std": 0.0010194100821839
+      },
+      {
+        "feature": "diet_s731g",
+        "importance_mean": 0.0064485423600944,
+        "importance_std": 0.0005442918551153
+      },
+      {
+        "feature": "diet_s731i",
+        "importance_mean": 0.0055011775501626,
+        "importance_std": 0.001350964752966
+      }
+    ],
+    "top_10_lr_coefficients_by_abs_magnitude": [
+      {
+        "feature": "num_median__age",
+        "coefficient": 0.3694606653687604,
+        "odds_ratio": 1.4469540117708006
+      },
+      {
+        "feature": "cat__alc_s722e_1.0",
+        "coefficient": 0.3551787738750563,
+        "odds_ratio": 1.4264356409153716
+      },
+      {
+        "feature": "cat_const0__alc_frequency_1.0",
+        "coefficient": 0.3505952053971953,
+        "odds_ratio": 1.419912436673194
+      },
+      {
+        "feature": "cat__tob_v463d_0.0",
+        "coefficient": 0.3283748203013875,
+        "odds_ratio": 1.3887093912240869
+      },
+      {
+        "feature": "cat__alc_s722e_0.0",
+        "coefficient": -0.3266876405546419,
+        "odds_ratio": 0.7213090155258004
+      },
+      {
+        "feature": "cat_const0__alc_frequency_3.0",
+        "coefficient": -0.3242676130103747,
+        "odds_ratio": 0.723056717101321
+      },
+      {
+        "feature": "cat__diet_s731f_0.0",
+        "coefficient": -0.304692368437393,
+        "odds_ratio": 0.737350171690341
+      },
+      {
+        "feature": "cat__tob_v463d_1.0",
+        "coefficient": -0.2998836869809777,
+        "odds_ratio": 0.7409043924968669
+      },
+      {
+        "feature": "num_median__bmi",
+        "coefficient": 0.2555398897025096,
+        "odds_ratio": 1.2911585159197851
+      },
+      {
+        "feature": "cat__alc_s722d_1.0",
+        "coefficient": 0.2462910070940119,
+        "odds_ratio": 1.2792717965473084
+      }
+    ],
+    "interpretation_language_used": "predictive contribution / association / model importance - no causal claims"
+  },
+  "men": {
+    "method_note": "Permutation importance (sklearn, model-agnostic, scoring=ROC-AUC) computed for the selected HGB production pipeline. This is NOT SHAP - shap package unavailable in this environment (no network access to install). LR coefficients are a separate interpretable reference model, refit on full training data for this purpose only, NOT the production model.",
+    "top_10_permutation_importance": [
+      {
+        "feature": "age",
+        "importance_mean": 0.1859149607570963,
+        "importance_std": 0.008461781638084
+      },
+      {
+        "feature": "avg_diastolic_bp",
+        "importance_mean": 0.0700751575195389,
+        "importance_std": 0.0048112519803708
+      },
+      {
+        "feature": "avg_systolic_bp",
+        "importance_mean": 0.0333045739756304,
+        "importance_std": 0.0010895679690522
+      },
+      {
+        "feature": "diet_sm630h",
+        "importance_mean": 0.0318357584394802,
+        "importance_std": 0.0016593579075975
+      },
+      {
+        "feature": "diet_sm630a",
+        "importance_mean": 0.0148345932926792,
+        "importance_std": 0.0009855341730689
+      },
+      {
+        "feature": "education",
+        "importance_mean": 0.014117294757251,
+        "importance_std": 0.001146074674953
+      },
+      {
+        "feature": "diet_sm630b",
+        "importance_mean": 0.0128999137644535,
+        "importance_std": 0.0011504008509844
+      },
+      {
+        "feature": "diet_sm630i",
+        "importance_mean": 0.012336533413409,
+        "importance_std": 0.0004384372922523
+      },
+      {
+        "feature": "diet_sm630e",
+        "importance_mean": 0.0110552681037345,
+        "importance_std": 0.0010849878392969
+      },
+      {
+        "feature": "tob_mv463z",
+        "importance_mean": 0.0084044696012535,
+        "importance_std": 0.0010249977802993
+      }
+    ],
+    "top_10_lr_coefficients_by_abs_magnitude": [
+      {
+        "feature": "num_median__age",
+        "coefficient": 0.5353890464725239,
+        "odds_ratio": 1.708112648203893
+      },
+      {
+        "feature": "cat__alc_sm621x_1",
+        "coefficient": -0.4776294354759902,
+        "odds_ratio": 0.6202519977876775
+      },
+      {
+        "feature": "cat__alc_sm621x_0",
+        "coefficient": 0.4704943657282131,
+        "odds_ratio": 1.600785371061319
+      },
+      {
+        "feature": "num_median__n_valid_diastolic_readings",
+        "coefficient": -0.3264611179119543,
+        "odds_ratio": 0.7214724268576762
+      },
+      {
+        "feature": "cat__diet_sm630d_0",
+        "coefficient": 0.3106656312188179,
+        "odds_ratio": 1.3643329545626113
+      },
+      {
+        "feature": "cat__diet_sm630e_1",
+        "coefficient": 0.2648342347504071,
+        "odds_ratio": 1.3032149301242677
+      },
+      {
+        "feature": "cat__diet_sm630e_0",
+        "coefficient": -0.2507919781768405,
+        "odds_ratio": 0.778184234026027
+      },
+      {
+        "feature": "cat__diet_sm630h_0",
+        "coefficient": 0.2478238112087726,
+        "odds_ratio": 1.281234173206247
+      },
+      {
+        "feature": "cat__diet_sm630b_0",
+        "coefficient": 0.2382590163184539,
+        "odds_ratio": 1.2690378517714027
+      },
+      {
+        "feature": "num_median__avg_diastolic_bp",
+        "coefficient": 0.2308263902760428,
+        "odds_ratio": 1.2596405346196375
+      }
+    ],
+    "interpretation_language_used": "predictive contribution / association / model importance - no causal claims"
+  }
+}

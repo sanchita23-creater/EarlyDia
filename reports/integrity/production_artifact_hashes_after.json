@@ -1,0 +1,74 @@
+{
+  "artifacts": {
+    "models/women_production_pipeline.pkl": {
+      "sha256": "b933f0880472325addbeccc421b36050cdcb692d2e4682c3e058ef5054011445",
+      "bytes": 230461
+    },
+    "models/men_production_pipeline.pkl": {
+      "sha256": "bf003571b963a831f76aee637b29df9bc557595feda64297ed8dea5b2d41115c",
+      "bytes": 114548
+    },
+    "models/production_pipeline_manifest.json": {
+      "sha256": "a728f45dbaaf96628e2cbceb816c4770f2f135e9cb081f2978c9ce0e305eef0d",
+      "bytes": 584
+    },
+    "configs/threshold_selection_summary.json": {
+      "sha256": "9c785779e11253e42daa374329838d82c91a1f8579df6885ced7c0fe204d752b",
+      "bytes": 2067
+    },
+    "configs/model_selection.json": {
+      "sha256": "a5b434b4409adc19e37432dcc02b6337f51e6e0bdd6565ccc225f09d2fef53eb",
+      "bytes": 1101
+    },
+    "configs/cv_config.json": {
+      "sha256": "346efeb2a0e78ac9f58eb07e6522e3aa626b1702c5f7f204a84a54cdbe9b2363",
+      "bytes": 1101
+    },
+    "configs/split_config.json": {
+      "sha256": "3e217e313663ac9ff48030f09322d7f2306c4316682761fe162bb499d0b93fbe",
+      "bytes": 1090
+    },
+    "configs/reproducibility_manifest.json": {
+      "sha256": "56346925d63f610314b26d2912562dc844fb6db76b965c63f1ff4593836e7d26",
+      "bytes": 8000
+    },
+    "reports/final_evaluation/final_test_evaluation.json": {
+      "sha256": "b50e65f57e8d01032cd18fd04cf5efab8b3484024aebccb2dd0a6bfa5b57cdb2",
+      "bytes": 7995
+    },
+    "src/target/women_target_construction.py": {
+      "sha256": "06d0799f201c5d5e81df99a868ab0bc4ce3e997cc9f3a59a29e08d02327fe303",
+      "bytes": 5344
+    },
+    "src/target/men_target_construction.py": {
+      "sha256": "3565dcffa61f528e035a850e8794277c146793eb571237356c2f266b93e12516",
+      "bytes": 2897
+    },
+    "src/features/predictor_construction.py": {
+      "sha256": "0f573ab8c10e60acb386c08bc9d60af687a0d073161b1fb5fd3c7fde5d154a1f",
+      "bytes": 7448
+    },
+    "src/inference/predict_module.py": {
+      "sha256": "5f539bdd5330c8445e4033d263e8608304f964547481771d38c87c19c1c44894",
+      "bytes": 8666
+    },
+    "src/app/input_spec.py": {
+      "sha256": "ec9bb5173f9a12c8af0256bb162c18ab6de34eaf0ed472de65a354305120c0e4",
+      "bytes": 13347
+    }
+  },
+  "thresholds": {
+    "women": 0.026,
+    "men": 0.027
+  },
+  "comparison": {
+    "artifacts_changed": false,
+    "changed_files": [],
+    "thresholds_changed": false,
+    "production_artifacts_changed": "NO",
+    "production_thresholds_changed": "NO",
+    "calibration_changed": "NO (artifact hashes identical)",
+    "target_a_changed": "NO (target construction source hashes identical)",
+    "predictors_changed": "NO (predictor_construction.py + input_spec.py hashes identical)"
+  }
+}

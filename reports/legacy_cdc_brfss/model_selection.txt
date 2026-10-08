@@ -1,0 +1,38 @@
+================================================================================
+EARLYDIA: FINAL MODEL SELECTION JUSTIFICATION
+================================================================================
+
+SELECTED MODEL FOR EARLYDIA: RANDOM FOREST
+
+CLINICAL SCREENING RATIONALE & METRIC PRIORITIZATION:
+--------------------------------------------------------------------------------
+1. Screening System Identity:
+   EarlyDia is explicitly designed for preliminary risk screening rather than medical diagnosis.
+   In risk screening, False Negatives (telling someone at high risk that they are low risk)
+   are clinically far more hazardous than False Positives (recommending a lifestyle check or
+   consultation to someone who turns out healthy).
+
+2. Recall (Sensitivity) Prioritization:
+   - Random Forest Recall:      0.7745 (77.45%)
+   - Logistic Regression Recall: 0.7597 (75.97%)
+   Random Forest successfully captures a higher proportion of positive risk cases,
+   reducing missed early indicators.
+
+3. Discrimination Power (ROC-AUC):
+   - Random Forest ROC-AUC:      0.8220
+   - Logistic Regression ROC-AUC: 0.8170
+   Random Forest demonstrates superior overall discriminatory ability across all potential
+   screening decision thresholds, capturing non-linear feature interactions between BMI,
+   Age brackets, and general health indicators.
+
+4. ML Risk Score & Prototype Screening Thresholds:
+   The ensemble structure of Random Forest generates continuous score distributions via predict_proba().
+   IMPORTANT MEDICAL & SCREENING FRAMING:
+   - The model output represents an ML-generated risk score / screening indication,
+     and is NOT a medically confirmed probability of having diabetes.
+   - The initial 30% and 60% partition thresholds are prototype screening thresholds
+     developed for educational exploration in Phase 1/Phase 2, NOT clinical diagnostic thresholds:
+       * Low Risk Indication:                 Score < 30.0%
+       * Moderate / Elevated Risk Indication: 30.0% <= Score <= 60.0%
+       * High Risk Indication:                Score > 60.0%
+================================================================================

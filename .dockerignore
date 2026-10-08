@@ -1,0 +1,14 @@
+.venv
+venv
+__pycache__
+.pytest_cache
+.git
+.github
+data
+notebooks
+tests
+docs
+frontend/node_modules
+frontend/dist
+frontend/.env
+**/*.pyc

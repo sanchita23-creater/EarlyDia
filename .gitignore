@@ -1,0 +1,57 @@
+# EarlyDia .gitignore
+
+# Raw NFHS microdata - NEVER commit. Not redistributable; obtain via DHS Program license.
+data/raw/*
+!data/raw/.gitkeep
+*.dta
+*.DTA
+*.dct
+*.DCT
+
+# Large derived/intermediate data artifacts (train/test splits, OOF predictions, etc.)
+# These are regenerable from data/raw/ via the src/ pipeline scripts + a fixed seed (42);
+# they are not committed to keep the repository small. Only the final production model
+# artifacts under models/ and models_v2/ are versioned.
+data/interim/*
+!data/interim/.gitkeep
+
+data/processed/*
+!data/processed/.gitkeep
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+.ipynb_checkpoints/
+.cache/
+*.cache
+
+# Virtual environments (never commit; a .venv can be hundreds of MB)
+.venv/
+venv/
+env/
+ENV/
+
+# Environment / secrets
+.env
+*.key
+*.pem
+secrets.*
+credentials.*
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Frontend dependencies and build output
+node_modules/
+**/node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.env

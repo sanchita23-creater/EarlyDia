@@ -1,0 +1,8 @@
+ingredient,variables,status
+random/point glucose value (mg/dL),sb74 / smb74,AVAILABLE (used by production Target A)
+known-diabetes self-report,"s728a, sb56, sb57 / sm627a, smb56, smb57",AVAILABLE (used by production Target A)
+'don't know' diabetes answer kept distinct from 'no',s728a / sm627a raw codes,"AVAILABLE in raw interim file, but production Target A drops these rows as ambiguous"
+fasting indicator,"sb53/sb54/sb55/sb73 (women), smb53/.../smb73 (men) retained as 'context'",UNVERIFIED - meaning not documented in project; not guessed
+hours since last food (>=8 h rule),unknown,UNVERIFIED - cannot confirm a duration variable exists among retained columns
+age 15-49 population,v012 / mv012 (all 15-49/54 rows kept in interim file),AVAILABLE in interim file only (production restricts to 18-40)
+row-level data in this build environment,"data/interim, data/processed",NOT PRESENT (raw NFHS microdata is not redistributed)

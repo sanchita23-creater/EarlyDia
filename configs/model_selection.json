@@ -1,0 +1,7 @@
+{
+  "women": {"selected_model": "HistGradientBoosting", "calibration_method": "isotonic",
+            "rationale": "Clear winner on both OOF ROC-AUC (0.6816 vs 0.6788) and PR-AUC (0.0924 vs 0.0756) over Logistic Regression."},
+  "men": {"selected_model": "HistGradientBoosting", "calibration_method": "sigmoid",
+          "rationale": "Mixed result: Logistic Regression has higher OOF ROC-AUC (0.6788 vs 0.6673), but HistGradientBoosting has higher OOF PR-AUC (0.0848 vs 0.0762) and a calibration slope closer to 1.0 (0.952 vs 0.893). Selected HGB for consistency with women's model and because PR-AUC is the more informative metric given the rare positive class (~3.6%). This is a judgment call, not a clean win - flagged for review; Logistic Regression remains a documented, close, more-interpretable alternative for men."},
+  "random_forest": "Retained for documentation only. Excluded from calibration/threshold selection: weakest ROC-AUC and PR-AUC of all three models in grouped CV for both sexes (women: 0.643/0.068; men: 0.636/0.067), independent of its 0.5-threshold sensitivity collapse."
+}

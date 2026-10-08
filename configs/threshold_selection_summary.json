@@ -1,0 +1,48 @@
+{
+  "women": {
+    "selected_model": "HistGradientBoosting",
+    "calibration_method": "isotonic",
+    "brier_raw_oof": 0.2098760632573026,
+    "brier_calibrated_oof": 0.03032775842818573,
+    "calibration_slope_oof": 1.001417378124989,
+    "calibration_intercept_oof": 0.003956599457166942,
+    "selected_threshold": 0.026,
+    "sensitivity_floor": 0.75,
+    "threshold_metrics_on_calibrated_oof": {
+      "sensitivity": 0.7548398608261219,
+      "specificity": 0.48285327249393983,
+      "precision_ppv": 0.046350215015475635,
+      "npv": 0.9833744736459997,
+      "f1": 0.08733755174086728,
+      "predicted_positive_rate": 0.5248064444719162,
+      "tp": 8461,
+      "fp": 174084,
+      "tn": 162540,
+      "fn": 2748
+    },
+    "selection_rule": "Highest threshold on a 0.001-step grid whose calibrated grouped-OOF sensitivity is >= 0.75. A documented screening-threshold choice reflecting a sensitivity/specificity trade-off; NOT a clinically optimal or universally correct threshold. Selected using training/OOF data only."
+  },
+  "men": {
+    "selected_model": "HistGradientBoosting",
+    "calibration_method": "sigmoid",
+    "brier_raw_oof": 0.19501069097586804,
+    "brier_calibrated_oof": 0.0349103889843148,
+    "calibration_slope_oof": 1.0013047619119229,
+    "calibration_intercept_oof": 0.0052257317448178115,
+    "selected_threshold": 0.027,
+    "sensitivity_floor": 0.75,
+    "threshold_metrics_on_calibrated_oof": {
+      "sensitivity": 0.7622801697998787,
+      "specificity": 0.4692924363889857,
+      "precision_ppv": 0.052166334661354584,
+      "npv": 0.9809597823975131,
+      "f1": 0.09765002913187028,
+      "predicted_positive_rate": 0.5392534240444007,
+      "tp": 1257,
+      "fp": 22839,
+      "tn": 20196,
+      "fn": 392
+    },
+    "selection_rule": "Highest threshold on a 0.001-step grid whose calibrated grouped-OOF sensitivity is >= 0.75. A documented screening-threshold choice reflecting a sensitivity/specificity trade-off; NOT a clinically optimal or universally correct threshold. Selected using training/OOF data only."
+  }
+}

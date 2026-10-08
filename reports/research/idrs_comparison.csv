@@ -1,0 +1,2 @@
+status,sensitivity,specificity,ppv,npv,roc_auc,pr_auc,reason
+NOT_COMPUTED,,,,,,,"3 of 4 IDRS components unavailable (waist, physical activity, family history); a faithful IDRS cannot be reproduced and EarlyDia was not modified."

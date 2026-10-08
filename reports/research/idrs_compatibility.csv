@@ -1,0 +1,5 @@
+idrs_variable,required_information,earlydia_availability,exact_mapping,reason
+Age,participant age in years,AVAILABLE,v012 / mv012 (model feature 'age'),"Available, but an age-only score is not the IDRS."
+Abdominal obesity (waist circumference),waist circumference in cm,UNAVAILABLE,,No waist/hip variable retained or administered in the extraction (extract_nfhs.py notes 'no waist/hip'). BMI is NOT a substitute.
+Physical activity,activity level (exercise / occupational),UNAVAILABLE,,No physical-activity variable retained.
+Family history of diabetes,parental diabetes,UNAVAILABLE,,No family-history variable retained.

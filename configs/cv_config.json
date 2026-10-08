@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "cv_strategy": "StratifiedGroupKFold",
+  "n_splits": 5,
+  "group_col_women": "v021_psu",
+  "group_col_men": "mv021_psu",
+  "train_test_split_method": "GroupShuffleSplit, group=PSU, test_size=0.20, seed search over [42..91], first satisfying seed=42",
+  "threshold_used_for_sens_spec_precision_f1_in_this_stage": 0.5,
+  "note": "Default 0.5 threshold used ONLY for baseline CV comparison metrics (ROC-AUC/PR-AUC are threshold-independent and are the primary comparison metrics). No threshold tuning, no calibration, no final-test-set evaluation performed at this stage.",
+  "models": {
+    "LogisticRegression": {"class_weight": "balanced", "max_iter": 2000, "random_state": 42},
+    "RandomForest": {"n_estimators": 200, "class_weight": "balanced", "random_state": 42, "n_jobs": -1},
+    "HistGradientBoosting": {"class_weight": "balanced", "random_state": 42}
+  },
+  "preprocessing": "Inside sklearn Pipeline per fold (SimpleImputer + StandardScaler for numeric, SimpleImputer + OneHotEncoder for categorical) - fit only on each fold's training portion, no leakage across folds."
+}

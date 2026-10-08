@@ -1,0 +1,225 @@
+=====================================================================================
+EARLYDIA: FEATURE SELECTION DOCUMENTATION
+Non-Invasive Early Diabetes Risk Screening Through Accessible Insights
+=====================================================================================
+
+PROJECT PHILOSOPHY & NON-INVASIVE IDENTITY:
+-------------------------------------------------------------------------------------
+EarlyDia is engineered strictly as a preliminary non-invasive risk screening system.
+It does NOT rely on laboratory blood-test values (no glucose, insulin, HbA1c, etc.).
+Every selected feature is self-reportable, accessible without specialized clinical
+equipment, and suitable for direct user collection via a future interactive frontend.
+
+Total Features in UCI Dataset 891:  21
+Features Selected for EarlyDia:     16
+Features Excluded from EarlyDia:    5
+
+=====================================================================================
+SECTION 1: FEATURES USED BY EARLYDIA (16 FEATURES)
+=====================================================================================
+
+Feature #1: BMI
+  - Category:            Anthropometric Indicator
+  - Meaning:             Body Mass Index (weight in kg / height in meters squared)
+  - Dataset Encoding:    Continuous / Integer: Range in dataset is 12 to 98 (mean ~28.38). Typical values: <18.5 Underweight, 18.5-24.9 Normal, 25-29.9 Overweight, 30+ Obese.
+  - Why Selected:        Established primary risk factor for type 2 diabetes. Easily computed non-invasively without laboratory blood draws.
+  - Frontend Collection: IMPORTANT FRONTEND INSTRUCTION FOR PHASE 2:
+Users typically do not know their BMI directly. The frontend must collect 'Height' (cm or ft/in) and 'Weight' (kg or lbs) using user-friendly input fields and automatically calculate BMI using:
+   BMI = weight_in_kg / ((height_in_cm / 100) ** 2)
+The calculated BMI value is then passed to the model. Height and Weight themselves must NOT be added as model features because the CDC trained dataset uses BMI.
+-------------------------------------------------------------------------------------
+Feature #2: Age
+  - Category:            Demographic Information
+  - Meaning:             13-level discrete age category (_AGEG5YR BRFSS codebook)
+  - Dataset Encoding:    Discrete Integer scale (1 to 13):
+   1 = Age 18 - 24
+   2 = Age 25 - 29
+   3 = Age 30 - 34
+   4 = Age 35 - 39
+   5 = Age 40 - 44
+   6 = Age 45 - 49
+   7 = Age 50 - 54
+   8 = Age 55 - 59
+   9 = Age 60 - 64
+  10 = Age 65 - 69
+  11 = Age 70 - 74
+  12 = Age 75 - 79
+  13 = Age 80 or older
+  - Why Selected:        Insulin resistance and type 2 diabetes risk increase significantly with age.
+  - Frontend Collection: Dropdown with labeled age ranges (e.g. '18-24', '25-29', ..., '80+'), or a single age input box with a helper function mapping age to the 1-13 category.
+-------------------------------------------------------------------------------------
+Feature #3: Sex
+  - Category:            Demographic Information
+  - Meaning:             Biological sex of the participant
+  - Dataset Encoding:    Binary: 0 = Female, 1 = Male
+  - Why Selected:        Biological sex influences body fat distribution, hormone profiles, and metabolic patterns.
+  - Frontend Collection: Radio buttons or toggle: 'Biological Sex' (Options: Female -> 0, Male -> 1).
+-------------------------------------------------------------------------------------
+Feature #4: GenHlth
+  - Category:            General Well-Being
+  - Meaning:             Self-assessed overall health status (GENHLTH BRFSS scale)
+  - Dataset Encoding:    Ordinal Integer scale (1 to 5):
+   1 = Excellent
+   2 = Very Good
+   3 = Good
+   4 = Fair
+   5 = Poor
+  - Why Selected:        Strongest single predictor of metabolic health in the CDC BRFSS dataset (correlation = 0.294).
+  - Frontend Collection: Select box or button group: 'In general, how would you describe your health?' (Options: Excellent -> 1, Very Good -> 2, Good -> 3, Fair -> 4, Poor -> 5).
+-------------------------------------------------------------------------------------
+Feature #5: MentHlth
+  - Category:            General Well-Being
+  - Meaning:             Days of poor mental health (stress, depression, emotional difficulties) during the past 30 days
+  - Dataset Encoding:    Discrete Integer: 0 to 30 days (0 = 0 days, 30 = every day)
+  - Why Selected:        Chronic psychological distress and depression correlate with metabolic dysregulation and poorer lifestyle adherence.
+  - Frontend Collection: Slider or number input (0 - 30): 'During the past 30 days, about how many days was your mental health not good?'
+-------------------------------------------------------------------------------------
+Feature #6: PhysHlth
+  - Category:            General Well-Being
+  - Meaning:             Days of physical illness and injury during the past 30 days
+  - Dataset Encoding:    Discrete Integer: 0 to 30 days (0 = 0 days, 30 = every day)
+  - Why Selected:        Measures ongoing chronic physical illness burden and functional impairment.
+  - Frontend Collection: Slider or number input (0 - 30): 'During the past 30 days, about how many days was your physical health not good?'
+-------------------------------------------------------------------------------------
+Feature #7: HighBP
+  - Category:            Physical Condition / Medical History
+  - Meaning:             Ever told by doctor, nurse, or health professional that blood pressure is high
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Hypertension is a hallmark comorbidity of insulin resistance and metabolic syndrome.
+  - Frontend Collection: Radio buttons: 'Have you ever been diagnosed with high blood pressure?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #8: HighChol
+  - Category:            Physical Condition / Medical History
+  - Meaning:             Ever told by doctor, nurse, or health professional that blood cholesterol is high
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Dyslipidemia frequently co-occurs with elevated diabetes risk and cardiovascular compromise.
+  - Frontend Collection: Radio buttons: 'Have you ever been told by a health professional that your cholesterol is high?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #9: Stroke
+  - Category:            Physical Condition / Medical History
+  - Meaning:             Ever told by a health professional that you had a stroke
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Major cardiovascular/cerebrovascular event indicating systemic vascular and metabolic risk.
+  - Frontend Collection: Radio buttons: 'Have you ever been diagnosed with a stroke?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #10: HeartDiseaseorAttack
+  - Category:            Physical Condition / Medical History
+  - Meaning:             History of coronary heart disease (CHD) or myocardial infarction (heart attack)
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Coronary heart disease shares primary metabolic and vascular risk pathways with type 2 diabetes.
+  - Frontend Collection: Radio buttons: 'Have you ever had coronary heart disease or a heart attack?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #11: DiffWalk
+  - Category:            Physical Condition / Mobility
+  - Meaning:             Serious difficulty walking or climbing stairs
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Indicator of physical mobility impairment, frailty, and sedentary risk profile (correlation = 0.218).
+  - Frontend Collection: Radio buttons: 'Do you have serious difficulty walking or climbing stairs?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #12: PhysActivity
+  - Category:            Lifestyle Information
+  - Meaning:             Participated in physical activity or exercise during the past 30 days other than regular job
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Regular physical activity directly enhances cellular insulin sensitivity and assists glucose regulation.
+  - Frontend Collection: Radio buttons: 'Did you participate in any physical exercise during the past 30 days outside work?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #13: Fruits
+  - Category:            Lifestyle Information
+  - Meaning:             Consumes fruit 1 or more times per day
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Reflects regular dietary intake of micronutrients, antioxidants, and whole food fiber.
+  - Frontend Collection: Radio buttons: 'Do you consume fruit at least once per day?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #14: Veggies
+  - Category:            Lifestyle Information
+  - Meaning:             Consumes vegetables 1 or more times per day
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Regular vegetable intake provides dietary fiber crucial for metabolic regulation and gut health.
+  - Frontend Collection: Radio buttons: 'Do you consume vegetables at least once per day?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #15: Smoker
+  - Category:            Lifestyle Information
+  - Meaning:             Smoked at least 100 cigarettes in entire life (5 packs)
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Tobacco smoking contributes to chronic systemic inflammation and impaired insulin sensitivity.
+  - Frontend Collection: Radio buttons: 'Have you smoked at least 100 cigarettes in your lifetime?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+Feature #16: HvyAlcoholConsump
+  - Category:            Lifestyle Information
+  - Meaning:             Heavy alcohol consumption (>14 drinks/week for adult men, >7 drinks/week for adult women)
+  - Dataset Encoding:    Binary: 0 = No, 1 = Yes
+  - Why Selected:        Excessive alcohol consumption contributes to hepatic fat accumulation and metabolic strain.
+  - Frontend Collection: Radio buttons: 'Do you consume alcohol heavily (more than 14 drinks/week for men, 7 for women)?' (No -> 0, Yes -> 1).
+-------------------------------------------------------------------------------------
+
+=====================================================================================
+SECTION 2: FEATURES EXCLUDED FROM EARLYDIA (5 FEATURES)
+=====================================================================================
+
+Excluded #1: CholCheck
+  - Meaning:            Had cholesterol check within the past 5 years (0 = No, 1 = Yes)
+  - Reason for Exclusion: Measures healthcare utilization frequency rather than physiological or lifestyle diabetes risk. Additionally, 96.3% of respondents answered 'Yes', providing negligible discriminative signal.
+-------------------------------------------------------------------------------------
+Excluded #2: AnyHealthcare
+  - Meaning:            Have any kind of healthcare coverage/insurance (0 = No, 1 = Yes)
+  - Reason for Exclusion: Administrative and insurance access indicator rather than an individual physiological or lifestyle risk factor. Insurance status varies widely by nation and does not reflect metabolic health.
+-------------------------------------------------------------------------------------
+Excluded #3: NoDocbcCost
+  - Meaning:            Could not see a doctor because of cost in past 12 months (0 = No, 1 = Yes)
+  - Reason for Exclusion: Financial and healthcare system barrier metric rather than an individual health risk determinant.
+-------------------------------------------------------------------------------------
+Excluded #4: Education
+  - Meaning:            Highest level of education completed (scale 1-6)
+  - Reason for Exclusion: Socioeconomic demographic variable that serves as a distal proxy rather than a direct biological or lifestyle determinant. Excluded to prevent socioeconomic bias in clinical screening.
+-------------------------------------------------------------------------------------
+Excluded #5: Income
+  - Meaning:            Annual household income bracket (scale 1-8 based on US dollar thresholds)
+  - Reason for Exclusion: US-specific dollar income scale that induces user hesitation/privacy discomfort during screening, lacks direct metabolic relevance, and introduces geographical and economic bias.
+-------------------------------------------------------------------------------------
+
+=====================================================================================
+SECTION 3: FRONTEND MAPPING & IMPLEMENTATION RULES FOR PHASE 2
+=====================================================================================
+
+A. BMI COLLECTION & CALCULATION RULE:
+-------------------------------------------------------------------------------------
+  - Users often do not know their BMI directly.
+  - The Phase 2 frontend MUST collect 'Height' (cm or ft/in) and 'Weight' (kg or lbs).
+  - The frontend MUST automatically compute BMI using:
+        BMI = weight_in_kg / ((height_in_cm / 100) ** 2)
+  - Height and Weight themselves MUST NOT be added as model features.
+  - Only the calculated BMI value is passed to the prediction pipeline.
+
+B. EXHAUSTIVE DATASET ENCODING REFERENCE TABLE:
+-------------------------------------------------------------------------------------
+  Feature       | Type      | Model Encoding / Value Format
+  --------------+-----------+-----------------------------------------------------------
+  BMI           | Numeric   | Continuous/Integer (typical 12 - 98)
+  Age           | Discrete  | 1=18-24, 2=25-29, 3=30-34, 4=35-39, 5=40-44, 6=45-49,
+                |           | 7=50-54, 8=55-59, 9=60-64, 10=65-69, 11=70-74,
+                |           | 12=75-79, 13=80 or older
+  Sex           | Binary    | 0 = Female, 1 = Male
+  GenHlth       | Ordinal   | 1 = Excellent, 2 = Very Good, 3 = Good, 4 = Fair, 5 = Poor
+  MentHlth      | Discrete  | Integer 0 to 30 (days of poor mental health in past 30 days)
+  PhysHlth      | Discrete  | Integer 0 to 30 (days of physical illness in past 30 days)
+  HighBP        | Binary    | 0 = No, 1 = Yes (diagnosed high blood pressure)
+  HighChol      | Binary    | 0 = No, 1 = Yes (diagnosed high cholesterol)
+  Stroke        | Binary    | 0 = No, 1 = Yes (diagnosed stroke)
+  HeartDisease  | Binary    | 0 = No, 1 = Yes (CHD or heart attack)
+  DiffWalk      | Binary    | 0 = No, 1 = Yes (difficulty walking or climbing stairs)
+  PhysActivity  | Binary    | 0 = No, 1 = Yes (exercise in past 30 days outside work)
+  Fruits        | Binary    | 0 = No, 1 = Yes (fruit >= 1 time/day)
+  Veggies       | Binary    | 0 = No, 1 = Yes (vegetables >= 1 time/day)
+  Smoker        | Binary    | 0 = No, 1 = Yes (smoked >= 100 cigarettes in lifetime)
+  HvyAlcohol    | Binary    | 0 = No, 1 = Yes (>14 drinks/wk men, >7 drinks/wk women)
+
+C. RISK SCORE & SCREENING TIERS FRAMING:
+-------------------------------------------------------------------------------------
+  - The predict_proba output represents an ML-generated risk score / screening indication.
+  - It is NOT a medically confirmed probability of having diabetes.
+  - Prototype Screening Thresholds (Heuristic Student Prototype, NOT Clinical Diagnostic):
+      * Low Risk Indication:                 Risk Score < 30.0%
+      * Moderate / Elevated Risk Indication: 30.0% <= Risk Score <= 60.0%
+      * High Risk Indication:                Risk Score > 60.0%
+  - Clear medical disclaimers must be displayed alongside any screening indication.
+=====================================================================================

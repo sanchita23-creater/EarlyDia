@@ -1,0 +1,119 @@
+================================================================================
+EARLYDIA: CDC DIABETES HEALTH INDICATORS (UCI ID: 891) DATASET INSPECTION
+================================================================================
+
+1. GENERAL DATASET INFORMATION
+----------------------------------------
+Dataset Name:              CDC Diabetes Health Indicators
+UCI Dataset ID:            891
+Source URL:                https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+Original Survey Source:    CDC Behavioral Risk Factor Surveillance System (BRFSS)
+Number of Instances:       253,680
+Number of Features:        21
+Target Column:             Diabetes_binary
+Missing Values:            0 (0.0% missing across all columns)
+Duplicate Rows:            24,206 (9.54%)
+
+2. TARGET VARIABLE ANALYSIS
+----------------------------------------
+Target Name:               Diabetes_binary
+Target Meaning:            0 = No Diabetes / Healthy
+                           1 = Prediabetes or Diabetes
+Class Distribution:
+  - Class 0 [No Diabetes (0)]: 218,334 instances (86.07%)
+  - Class 1 [Prediabetes / Diabetes (1)]: 35,346 instances (13.93%)
+Class Imbalance Ratio:     Approximately 6.18 : 1
+Imbalance Implication:     Class imbalance requires stratified sampling and evaluation
+                           prioritizing Recall/Sensitivity and F1 Score rather than accuracy alone.
+
+3. DATASET FEATURES (TOTAL: 21)
+----------------------------------------
+ 1. HighBP                 | Type: int64    | Discrete values: [0, 1]
+ 2. HighChol               | Type: int64    | Discrete values: [0, 1]
+ 3. CholCheck              | Type: int64    | Discrete values: [0, 1]
+ 4. BMI                    | Type: int64    | 84 unique values [Min: 12, Max: 98]
+ 5. Smoker                 | Type: int64    | Discrete values: [0, 1]
+ 6. Stroke                 | Type: int64    | Discrete values: [0, 1]
+ 7. HeartDiseaseorAttack   | Type: int64    | Discrete values: [0, 1]
+ 8. PhysActivity           | Type: int64    | Discrete values: [0, 1]
+ 9. Fruits                 | Type: int64    | Discrete values: [0, 1]
+10. Veggies                | Type: int64    | Discrete values: [0, 1]
+11. HvyAlcoholConsump      | Type: int64    | Discrete values: [0, 1]
+12. AnyHealthcare          | Type: int64    | Discrete values: [0, 1]
+13. NoDocbcCost            | Type: int64    | Discrete values: [0, 1]
+14. GenHlth                | Type: int64    | Discrete values: [1, 2, 3, 4, 5]
+15. MentHlth               | Type: int64    | 31 unique values [Min: 0, Max: 30]
+16. PhysHlth               | Type: int64    | 31 unique values [Min: 0, Max: 30]
+17. DiffWalk               | Type: int64    | Discrete values: [0, 1]
+18. Sex                    | Type: int64    | Discrete values: [0, 1]
+19. Age                    | Type: int64    | Discrete values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+20. Education              | Type: int64    | Discrete values: [1, 2, 3, 4, 5, 6]
+21. Income                 | Type: int64    | Discrete values: [1, 2, 3, 4, 5, 6, 7, 8]
+
+4. UCI VARIABLES SPECIFICATION (CODEBOOK)
+----------------------------------------
+                name    role    type     demographic                                                                                                                                                                                                                                                                                                                             description units missing_values
+                  ID      ID Integer             NaN                                                                                                                                                                                                                                                                                                                              Patient ID  None             no
+     Diabetes_binary  Target  Binary             NaN                                                                                                                                                                                                                                                                                             0 = no diabetes 1 = prediabetes or diabetes  None             no
+              HighBP Feature  Binary             NaN                                                                                                                                                                                                                                                                                                              0 = no high BP 1 = high BP  None             no
+            HighChol Feature  Binary             NaN                                                                                                                                                                                                                                                                                            0 = no high cholesterol 1 = high cholesterol  None             no
+           CholCheck Feature  Binary             NaN                                                                                                                                                                                                                                                                0 = no cholesterol check in 5 years 1 = yes cholesterol check in 5 years  None             no
+                 BMI Feature Integer             NaN                                                                                                                                                                                                                                                                                                                         Body Mass Index  None             no
+              Smoker Feature  Binary             NaN                                                                                                                                                                                                                            Have you smoked at least 100 cigarettes in your entire life? [Note: 5 packs = 100 cigarettes] 0 = no 1 = yes  None             no
+              Stroke Feature  Binary             NaN                                                                                                                                                                                                                                                                                            (Ever told) you had a stroke. 0 = no 1 = yes  None             no
+HeartDiseaseorAttack Feature  Binary             NaN                                                                                                                                                                                                                                                               coronary heart disease (CHD) or myocardial infarction (MI) 0 = no 1 = yes  None             no
+        PhysActivity Feature  Binary             NaN                                                                                                                                                                                                                                                                    physical activity in past 30 days - not including job 0 = no 1 = yes  None             no
+              Fruits Feature  Binary             NaN                                                                                                                                                                                                                                                                                    Consume Fruit 1 or more times per day 0 = no 1 = yes  None             no
+             Veggies Feature  Binary             NaN                                                                                                                                                                                                                                                                               Consume Vegetables 1 or more times per day 0 = no 1 = yes  None             no
+   HvyAlcoholConsump Feature  Binary             NaN                                                                                                                                                                                                        Heavy drinkers (adult men having more than 14 drinks per week and adult women having more than 7 drinks per week) 0 = no 1 = yes  None             no
+       AnyHealthcare Feature  Binary             NaN                                                                                                                                                                                                                       Have any kind of health care coverage, including health insurance, prepaid plans such as HMO, etc. 0 = no 1 = yes  None             no
+         NoDocbcCost Feature  Binary             NaN                                                                                                                                                                                                                    Was there a time in the past 12 months when you needed to see a doctor but could not because of cost? 0 = no 1 = yes  None             no
+             GenHlth Feature Integer             NaN                                                                                                                                                                                                                          Would you say that in general your health is: scale 1-5 1 = excellent 2 = very good 3 = good 4 = fair 5 = poor  None             no
+            MentHlth Feature Integer             NaN                                                                                                                                        Now thinking about your mental health, which includes stress, depression, and problems with emotions, for how many days during the past 30 days was your mental health not good? scale 1-30 days  None             no
+            PhysHlth Feature Integer             NaN                                                                                                                                                       Now thinking about your physical health, which includes physical illness and injury, for how many days during the past 30 days was your physical health not good? scale 1-30 days  None             no
+            DiffWalk Feature  Binary             NaN                                                                                                                                                                                                                                                               Do you have serious difficulty walking or climbing stairs? 0 = no 1 = yes  None             no
+                 Sex Feature  Binary             Sex                                                                                                                                                                                                                                                                                                                     0 = female 1 = male  None             no
+                 Age Feature Integer             Age                                                                                                                                                                                                                                                      13-level age category (_AGEG5YR see codebook) 1 = 18-24 9 = 60-64 13 = 80 or older  None             no
+           Education Feature Integer Education Level Education level (EDUCA see codebook) scale 1-6 1 = Never attended school or only kindergarten 2 = Grades 1 through 8 (Elementary) 3 = Grades 9 through 11 (Some high school) 4 = Grade 12 or GED (High school graduate) 5 = College 1 year to 3 years (Some college or technical school) 6 = College 4 years or more (College graduate)  None             no
+              Income Feature Integer          Income                                                                                                                                                                                                                           Income scale (INCOME2 see codebook) scale 1-8 1 = less than $10,000 5 = less than $35,000 8 = $75,000 or more  None             no
+
+5. DESCRIPTIVE STATISTICS
+----------------------------------------
+                         count       mean       std   min   25%   50%   75%   max
+HighBP                253680.0   0.429001  0.494934   0.0   0.0   0.0   1.0   1.0
+HighChol              253680.0   0.424121  0.494210   0.0   0.0   0.0   1.0   1.0
+CholCheck             253680.0   0.962670  0.189571   0.0   1.0   1.0   1.0   1.0
+BMI                   253680.0  28.382364  6.608694  12.0  24.0  27.0  31.0  98.0
+Smoker                253680.0   0.443169  0.496761   0.0   0.0   0.0   1.0   1.0
+Stroke                253680.0   0.040571  0.197294   0.0   0.0   0.0   0.0   1.0
+HeartDiseaseorAttack  253680.0   0.094186  0.292087   0.0   0.0   0.0   0.0   1.0
+PhysActivity          253680.0   0.756544  0.429169   0.0   1.0   1.0   1.0   1.0
+Fruits                253680.0   0.634256  0.481639   0.0   0.0   1.0   1.0   1.0
+Veggies               253680.0   0.811420  0.391175   0.0   1.0   1.0   1.0   1.0
+HvyAlcoholConsump     253680.0   0.056197  0.230302   0.0   0.0   0.0   0.0   1.0
+AnyHealthcare         253680.0   0.951053  0.215759   0.0   1.0   1.0   1.0   1.0
+NoDocbcCost           253680.0   0.084177  0.277654   0.0   0.0   0.0   0.0   1.0
+GenHlth               253680.0   2.511392  1.068477   1.0   2.0   2.0   3.0   5.0
+MentHlth              253680.0   3.184772  7.412847   0.0   0.0   0.0   2.0  30.0
+PhysHlth              253680.0   4.242081  8.717951   0.0   0.0   0.0   3.0  30.0
+DiffWalk              253680.0   0.168224  0.374066   0.0   0.0   0.0   0.0   1.0
+Sex                   253680.0   0.440342  0.496429   0.0   0.0   0.0   1.0   1.0
+Age                   253680.0   8.032119  3.054220   1.0   6.0   8.0  10.0  13.0
+Education             253680.0   5.050434  0.985774   1.0   4.0   5.0   6.0   6.0
+Income                253680.0   6.053875  2.071148   1.0   5.0   7.0   8.0   8.0
+Diabetes_binary       253680.0   0.139333  0.346294   0.0   0.0   0.0   0.0   1.0
+
+6. DATASET LIMITATIONS & OBSERVATIONS
+----------------------------------------
+a. Self-Reported Survey Data: All attributes originate from the CDC BRFSS telephone survey.
+   Self-reporting is subject to recall bias and social desirability bias.
+b. Ordinal Discretization: Age (1-13 brackets), Education (1-6 scale), and Income (1-8 scale)
+   are pre-bucketed rather than continuous natural units.
+c. Duplicate Rows: 24,206 identical rows exist because survey participants with identical
+   discrete demographic and lifestyle categories produce identical feature vectors.
+   These are legitimate distinct individuals answering identical categorical questions.
+d. Target Combination: Class 1 combines prediabetes and diagnosed diabetes into a single binary group.
+   This makes the target suitable for general early risk screening.
+e. Laboratory Test Absence: The dataset contains no direct clinical glucose, insulin, or HbA1c
+   measurements, making it an ideal benchmark for non-invasive risk screening.
+================================================================================

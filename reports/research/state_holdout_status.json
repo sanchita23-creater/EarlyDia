@@ -1,0 +1,4 @@
+{
+  "status": "NOT_RUN",
+  "reason": "Needs row-level locked test predictions + state codes (data/processed); not present in this build."
+}

@@ -1,0 +1,61 @@
+{
+  "label": "Alternative literature-aligned target - NOT used by the EarlyDia production model",
+  "full_replication_possible": false,
+  "reason": "Fasting status/duration variables cannot be verified from the retained extraction documentation, and no row-level data is present to inspect their codes. No alternative target was constructed and no alternative prevalence is reported.",
+  "retained_context_columns_women": [
+    "sb53",
+    "sb54",
+    "sb55",
+    "sb73"
+  ],
+  "ingredients": [
+    {
+      "ingredient": "random/point glucose value (mg/dL)",
+      "variables": "sb74 / smb74",
+      "status": "AVAILABLE (used by production Target A)"
+    },
+    {
+      "ingredient": "known-diabetes self-report",
+      "variables": "s728a, sb56, sb57 / sm627a, smb56, smb57",
+      "status": "AVAILABLE (used by production Target A)"
+    },
+    {
+      "ingredient": "'don't know' diabetes answer kept distinct from 'no'",
+      "variables": "s728a / sm627a raw codes",
+      "status": "AVAILABLE in raw interim file, but production Target A drops these rows as ambiguous"
+    },
+    {
+      "ingredient": "fasting indicator",
+      "variables": "sb53/sb54/sb55/sb73 (women), smb53/.../smb73 (men) retained as 'context'",
+      "status": "UNVERIFIED - meaning not documented in project; not guessed"
+    },
+    {
+      "ingredient": "hours since last food (>=8 h rule)",
+      "variables": "unknown",
+      "status": "UNVERIFIED - cannot confirm a duration variable exists among retained columns"
+    },
+    {
+      "ingredient": "age 15-49 population",
+      "variables": "v012 / mv012 (all 15-49/54 rows kept in interim file)",
+      "status": "AVAILABLE in interim file only (production restricts to 18-40)"
+    },
+    {
+      "ingredient": "row-level data in this build environment",
+      "variables": "data/interim, data/processed",
+      "status": "NOT PRESENT (raw NFHS microdata is not redistributed)"
+    }
+  ],
+  "allowed_uses": [
+    "prevalence sensitivity",
+    "target-definition comparison",
+    "robustness analysis"
+  ],
+  "forbidden_uses": [
+    "retraining",
+    "threshold changes",
+    "calibration changes",
+    "inference changes",
+    "final test set changes"
+  ],
+  "to_complete": "On a machine with data/interim/*.pkl and the NFHS-5 codebook: confirm sb53-sb73 meanings, then implement the definition here (research-only) and report prevalence for ages 15-49 and 18-40."
+}

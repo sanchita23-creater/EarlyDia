@@ -1,0 +1,255 @@
+{
+  "women": {
+    "sex": "women",
+    "model": "HistGradientBoosting",
+    "calibration_method": "isotonic",
+    "threshold": 0.026,
+    "threshold_selection_rule": "Highest threshold (from calibrated grouped-OOF training predictions) satisfying sensitivity >= 0.75. This is a DOCUMENTED SCREENING-THRESHOLD CHOICE reflecting a sensitivity/specificity trade-off, NOT a clinically optimal or universally correct threshold. Selected using ONLY training/OOF data; the final test set was never used for threshold selection.",
+    "overall": {
+      "n": 86669,
+      "n_positive": 2630,
+      "prevalence": 0.030345336856315408,
+      "roc_auc": 0.6850735266538617,
+      "pr_auc": 0.08347768366548458,
+      "sensitivity": 0.7619771863117871,
+      "specificity": 0.4796820523804424,
+      "ppv_precision": 0.043821477772189546,
+      "npv": 0.9847085837119547,
+      "f1": 0.08287669816587746,
+      "brier_score": 0.028684819068421376,
+      "confusion_matrix": {
+        "tp": 2004,
+        "fp": 43727,
+        "tn": 40312,
+        "fn": 626
+      },
+      "n_predicted_positive": 45731,
+      "pct_predicted_positive": 52.7651178622114,
+      "calibration_slope": 1.0225863753530275,
+      "calibration_intercept": 0.011592774814609564
+    },
+    "reliability_table": [
+      {
+        "mean_predicted": 0.012806324147142945,
+        "frac_positive": 0.011907674741048854,
+        "n": 12261
+      },
+      {
+        "mean_predicted": 0.014705501606482683,
+        "frac_positive": 0.017485265225933203,
+        "n": 5090
+      },
+      {
+        "mean_predicted": 0.016989191723639215,
+        "frac_positive": 0.013933649289099527,
+        "n": 10550
+      },
+      {
+        "mean_predicted": 0.020458153395709163,
+        "frac_positive": 0.018994172242607382,
+        "n": 9266
+      },
+      {
+        "mean_predicted": 0.024667966174563967,
+        "frac_positive": 0.02240649258997883,
+        "n": 11336
+      },
+      {
+        "mean_predicted": 0.02722452186788522,
+        "frac_positive": 0.025604996096799375,
+        "n": 6405
+      },
+      {
+        "mean_predicted": 0.031876780669869535,
+        "frac_positive": 0.029957203994293864,
+        "n": 7010
+      },
+      {
+        "mean_predicted": 0.037914810020106625,
+        "frac_positive": 0.03526056520611875,
+        "n": 7714
+      },
+      {
+        "mean_predicted": 0.051580247674931856,
+        "frac_positive": 0.05024051309460182,
+        "n": 9355
+      },
+      {
+        "mean_predicted": 0.09507636023086168,
+        "frac_positive": 0.09138245248633169,
+        "n": 7682
+      }
+    ],
+    "age_subgroups": {
+      "age_18_29": {
+        "n": 48133,
+        "n_positive": 928,
+        "prevalence": 0.019279911910747304,
+        "roc_auc": 0.6214445704538897,
+        "pr_auc": 0.03944249222560783,
+        "sensitivity": 0.46120689655172414,
+        "specificity": 0.7279525473996399,
+        "ppv_precision": 0.03225320271288621,
+        "npv": 0.9856581476063448,
+        "f1": 0.06029018171573461,
+        "brier_score": 0.01873448366860397,
+        "confusion_matrix": {
+          "tp": 428,
+          "fp": 12842,
+          "tn": 34363,
+          "fn": 500
+        },
+        "n_predicted_positive": 13270,
+        "pct_predicted_positive": 27.569443001682835
+      },
+      "age_30_40": {
+        "n": 38536,
+        "n_positive": 1702,
+        "prevalence": 0.044166493668258255,
+        "roc_auc": 0.6673682932420725,
+        "pr_auc": 0.10134837368507936,
+        "sensitivity": 0.9259694477085781,
+        "specificity": 0.1615083889884346,
+        "ppv_precision": 0.04855056837435692,
+        "npv": 0.9792592592592593,
+        "f1": 0.09226355999180401,
+        "brier_score": 0.04111318459155328,
+        "confusion_matrix": {
+          "tp": 1576,
+          "fp": 30885,
+          "tn": 5949,
+          "fn": 126
+        },
+        "n_predicted_positive": 32461,
+        "pct_predicted_positive": 84.23552003321569
+      }
+    }
+  },
+  "men": {
+    "sex": "men",
+    "model": "HistGradientBoosting",
+    "calibration_method": "sigmoid",
+    "threshold": 0.027,
+    "threshold_selection_rule": "Highest threshold (from calibrated grouped-OOF training predictions) satisfying sensitivity >= 0.75. This is a DOCUMENTED SCREENING-THRESHOLD CHOICE reflecting a sensitivity/specificity trade-off, NOT a clinically optimal or universally correct threshold. Selected using ONLY training/OOF data; the final test set was never used for threshold selection.",
+    "overall": {
+      "n": 11408,
+      "n_positive": 377,
+      "prevalence": 0.033046984572230015,
+      "roc_auc": 0.6649502595410521,
+      "pr_auc": 0.07192728529461416,
+      "sensitivity": 0.7559681697612732,
+      "specificity": 0.45399329163267155,
+      "ppv_precision": 0.045180722891566265,
+      "npv": 0.9819607843137255,
+      "f1": 0.08526551982049364,
+      "brier_score": 0.0315258610173612,
+      "confusion_matrix": {
+        "tp": 285,
+        "fp": 6023,
+        "tn": 5008,
+        "fn": 92
+      },
+      "n_predicted_positive": 6308,
+      "pct_predicted_positive": 55.2945301542777,
+      "calibration_slope": 0.9522333399626626,
+      "calibration_intercept": -0.27564085733107585
+    },
+    "reliability_table": [
+      {
+        "mean_predicted": 0.012624302085426246,
+        "frac_positive": 0.021034180543382998,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.016680500668906965,
+        "frac_positive": 0.008764241893076249,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.019476302477308936,
+        "frac_positive": 0.0148861646234676,
+        "n": 1142
+      },
+      {
+        "mean_predicted": 0.022836498062014574,
+        "frac_positive": 0.019315188762071993,
+        "n": 1139
+      },
+      {
+        "mean_predicted": 0.02729228025485312,
+        "frac_positive": 0.029798422436459245,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.033255069580470406,
+        "frac_positive": 0.02716914986853637,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.04044288898012993,
+        "frac_positive": 0.03508771929824561,
+        "n": 1140
+      },
+      {
+        "mean_predicted": 0.04995481588371004,
+        "frac_positive": 0.03155127081507449,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.062017783002656264,
+        "frac_positive": 0.06310254163014899,
+        "n": 1141
+      },
+      {
+        "mean_predicted": 0.08876861578949018,
+        "frac_positive": 0.07975460122699386,
+        "n": 1141
+      }
+    ],
+    "age_subgroups": {
+      "age_18_29": {
+        "n": 6390,
+        "n_positive": 128,
+        "prevalence": 0.02003129890453834,
+        "roc_auc": 0.574869375798467,
+        "pr_auc": 0.03784603568595869,
+        "sensitivity": 0.390625,
+        "specificity": 0.7328329607154264,
+        "ppv_precision": 0.02901915264074289,
+        "npv": 0.9832869080779945,
+        "f1": 0.05402485143165856,
+        "brier_score": 0.01959668949313098,
+        "confusion_matrix": {
+          "tp": 50,
+          "fp": 1673,
+          "tn": 4589,
+          "fn": 78
+        },
+        "n_predicted_positive": 1723,
+        "pct_predicted_positive": 26.96400625978091
+      },
+      "age_30_40": {
+        "n": 5018,
+        "n_positive": 249,
+        "prevalence": 0.04962136309286568,
+        "roc_auc": 0.6177079885909753,
+        "pr_auc": 0.08475509405619924,
+        "sensitivity": 0.9437751004016064,
+        "specificity": 0.08785908995596561,
+        "ppv_precision": 0.05125408942202835,
+        "npv": 0.9676674364896074,
+        "f1": 0.09722796855606122,
+        "brier_score": 0.046716655365673494,
+        "confusion_matrix": {
+          "tp": 235,
+          "fp": 4350,
+          "tn": 419,
+          "fn": 14
+        },
+        "n_predicted_positive": 4585,
+        "pct_predicted_positive": 91.37106416899164
+      }
+    }
+  },
+  "note": "This is the ONLY evaluation performed on the final untouched test sets. No retraining, recalibration, or threshold changes occurred after this point."
+}
