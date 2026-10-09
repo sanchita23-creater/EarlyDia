@@ -115,6 +115,53 @@ def test_semicircular_gauge_svg():
             assert f"{prob:.2f}%" in svg
 
 
+def test_react_probability_scale_gauge():
+    jsx_path = ROOT / "frontend" / "src" / "components" / "ProbabilityScale.jsx"
+    assert jsx_path.exists(), "ProbabilityScale.jsx must exist"
+    content = jsx_path.read_text(encoding="utf-8")
+
+    # Real React component rendering inline SVG
+    assert "<svg" in content
+    assert "gauge-svg" in content
+    assert "SCALE_MAX = 15" in content
+
+    # Clamping needle at 15% while displaying real probability number
+    assert "clampedPercent" in content
+    assert "needleFrac" in content
+
+    # Cutoff tick & dynamic label (not hardcoded)
+    assert "Screening cutoff" in content
+    assert "gauge-cutoff-tick" in content
+    assert "cutoffLabel" in content
+
+    # Calm zones in navy/white/black palette, no alarming red / danger wording
+    assert "gauge-zone-below" in content
+    assert "gauge-zone-above" in content
+    lower_c = content.lower()
+    assert "danger" not in lower_c
+    assert "alarm" not in lower_c
+
+    # Accessible aria-label with disclaimer and status
+    assert "aria-label=" in content
+    assert "This does not mean you have diabetes" in content
+
+
+def test_results_why_these_inputs_table():
+    results_path = ROOT / "frontend" / "src" / "pages" / "Results.jsx"
+    assert results_path.exists(), "Results.jsx must exist"
+    content = results_path.read_text(encoding="utf-8")
+
+    # Why these inputs section inside Technical Details
+    assert "Why these inputs" in content
+    assert "These are published associations, not proof that any factor caused your result" in content
+    assert "Model importance values are in the repo reports" in content
+
+    # Must contain citations from docs/RESEARCH_EVIDENCE.md
+    for tag in ["[ADA-2]", "[INDIAB-1]", "[EMDIN-2015]", "[WILLI-2007]"]:
+        assert tag in content, f"Expected citation tag {tag} in Results.jsx"
+
+
+
 if __name__ == "__main__":
     tests = [v for k, v in list(globals().items()) if k.startswith("test_")]
     passed = failed = 0
