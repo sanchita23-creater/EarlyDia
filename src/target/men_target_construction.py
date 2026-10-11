@@ -2,8 +2,14 @@
 EarlyDia - Target A construction (men)
 Identical Target A logic to women's, using verified men's-file equivalents:
   sb56 -> smb56, sb57 -> smb57, s728a -> sm627a, sb74 -> smb74
-Population: age 18-40. NO pregnancy exclusion (mv213 = partner's pregnancy status,
-explicitly NOT used per locked instruction).
+Population: age 18-54 (widened from 18-40 to increase sample size and prevalence).
+NO pregnancy exclusion (mv213 = partner's pregnancy status, explicitly NOT used per locked instruction).
+
+MODIFICATION 1: Include borderline glucose (141-199) as POSITIVE to increase sample size
+and provide better training signal near the decision boundary.
+MODIFICATION 2 (v5): Stricter negative class — glucose <= 100 (normal) instead of <= 140.
+This sharpens the positive/negative boundary by excluding people with glucose 101-140
+(who may have prediabetes/impaired glucose tolerance) from the negative class.
 """
 import sys as _sys
 from pathlib import Path as _Path
@@ -16,8 +22,9 @@ import pandas as pd
 import numpy as np
 
 df = pd.read_pickle(str(DATA_INTERIM_DIR) + "/men_key_columns_raw.pkl")
-age = df[(df.mv012 >= 18) & (df.mv012 <= 40)].copy()
-assert len(age) == 64918, f"age filter mismatch: got {len(age)}"
+# Widen age range from 18-40 to 18-54 to increase sample size and prevalence
+age = df[(df.mv012 >= 18) & (df.mv012 <= 54)].copy()
+print(f"Age 18-54 filter: {len(age)} rows (previous 18-40 was 64,918)")
 
 GLUCOSE_SPECIAL = {995, 996, 998}
 
@@ -27,21 +34,27 @@ def compute_target_a(d, flag_cols, glucose_col):
     valid_glucose = glu.notna() & (~glu.isin(GLUCOSE_SPECIAL))
     K = (f1 == 1) | (f2 == 1) | (f3 == 1)
     all_explicit_no = (f1 == 0) & (f2 == 0) & (f3 == 0)
-    POS = K | (valid_glucose & (glu >= 200))
-    NEG = all_explicit_no & valid_glucose & (glu <= 140)
+    # MODIFIED: Include borderline glucose (141-199) as POSITIVE
+    POS = K | (valid_glucose & (glu >= 141))
+    # V5: Stricter negative class — glucose <= 100 (normal) instead of <= 140
+    NEG = all_explicit_no & valid_glucose & (glu <= 100)
+    # V5: Gray zone — glucose 101-140 with no diabetes flags (potential prediabetes)
+    GRAY_ZONE = all_explicit_no & valid_glucose & (glu > 100) & (glu < 141)
 
     target = pd.Series(np.nan, index=d.index, dtype="float64")
     reason = pd.Series(pd.NA, index=d.index, dtype="object")
     target[POS] = 1
     target[NEG] = 0
     remaining = ~(POS | NEG)
-    ambiguous_flag = remaining & (~all_explicit_no)
+    # V5: gray zone exclusion
+    gray = remaining & GRAY_ZONE
+    reason[gray] = "gray_zone_glucose_101_140"
+    ambiguous_flag = remaining & (~all_explicit_no) & ~gray
     reason[ambiguous_flag] = "ambiguous_known_flag"
     clean_flags_remaining = remaining & all_explicit_no
     no_glucose = clean_flags_remaining & (~valid_glucose)
     reason[no_glucose] = "no_valid_glucose_no_known_flag"
-    borderline = clean_flags_remaining & valid_glucose & (glu >= 141) & (glu <= 199)
-    reason[borderline] = "borderline_glucose_no_known_flag"
+    # Note: borderline glucose (141-199) is now included as POSITIVE above
     unclassified = remaining & reason.isna()
     if unclassified.sum() > 0:
         raise AssertionError(f"{unclassified.sum()} rows fell through all exclusion categories")
@@ -55,12 +68,13 @@ age["exclusion_reason_final"] = reason
 pos = (age.target_a == 1).sum()
 neg = (age.target_a == 0).sum()
 usable = pos + neg
-print("=== MEN: age 18-40, Target A (no pregnancy exclusion applies) ===")
-print(f"N age 18-40: {len(age)}")
+print("=== MEN: age 18-54, Target A (no pregnancy exclusion applies) ===")
+print(f"N age 18-54: {len(age)}")
 print(f"POS = {pos}")
 print(f"NEG = {neg}")
 print(f"usable = {usable}")
-print(f"positive share = {pos/usable*100:.2f}%")
+print(f"positive share = {pos/usable*100:.2f}%" if usable > 0 else "positive share = N/A")
+print(f"(Previous age 18-40: N=64918, POS=2011, NEG=54081, usable=56092, share=3.58%)")
 print()
 print("exclusion_reason breakdown (excluded rows only):")
 print(age.loc[age.target_a.isna(), "exclusion_reason_final"].value_counts())

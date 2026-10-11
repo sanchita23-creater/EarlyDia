@@ -1,0 +1,26 @@
+{
+  "women": {
+    "model": "LightGBM (v2 - lgbm_D)",
+    "roc_auc": 0.8016,
+    "roc_auc_sd": 0.0017,
+    "sensitivity": 0.750,
+    "specificity": 0.701,
+    "ppv_precision": 0.431,
+    "pct_predicted_positive": 0.404,
+    "pr_auc": 0.5829,
+    "brier": 0.1776,
+    "decision_threshold": 0.212
+  },
+  "men": {
+    "model": "CatBoost (v2 - cb_B)",
+    "roc_auc": 0.8033,
+    "roc_auc_sd": 0.0086,
+    "sensitivity": 0.751,
+    "specificity": 0.704,
+    "ppv_precision": 0.541,
+    "pct_predicted_positive": 0.440,
+    "pr_auc": 0.6678,
+    "brier": 0.1791,
+    "decision_threshold": 0.300
+  }
+}

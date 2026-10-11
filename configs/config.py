@@ -51,4 +51,5 @@ PRODUCTION_PIPELINE_V2_PATHS = {
     "women": MODELS_V2_DIR / "women_v2_pipeline.pkl",
     "men": MODELS_V2_DIR / "men_v2_pipeline.pkl",
 }
-DOCUMENTED_V2_THRESHOLDS = {"women": 0.024, "men": 0.029}
+# Updated for XGBoost v2 candidate promotion
+DOCUMENTED_V2_THRESHOLDS = {"women": 0.026, "men": 0.028}

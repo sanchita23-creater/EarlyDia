@@ -12,8 +12,9 @@ REQUIRED INPUT (NOT distributed with this project - see docs/DATA_REPRODUCTION.m
                             (~724,115 rows x 5,972 variables, ~5.2 GB)
     data/raw/IAMR7EFL.DTA   NFHS-5 Men's Recode, men 15-54
                             (~101,839 rows, ~100 MB)
-    The Household/Person recode (IAPR7EFL) is NOT needed: every variable EarlyDia uses is
-    available in the individual recodes, and the person recode only repeats them.
+    data/raw/IAPR7EFL.DTA   NFHS-5 Household/Person Recode (women's waist/hip only)
+                            (~2 GB). Used to merge sh305/sh306 onto women's IR via
+                            cluster+household+line-number join.
 
 OUTPUT
     data/interim/women_key_columns_raw.pkl   (69 columns, all women 15-49 rows)
@@ -58,6 +59,7 @@ from configs.config import DATA_INTERIM_DIR, DATA_RAW_DIR  # noqa: E402
 
 WOMEN_FILE = "IAIR7EFL.DTA"
 MEN_FILE = "IAMR7EFL.DTA"
+PR_FILE = "IAPR7EFL.DTA"
 
 # Grouped by role so the purpose of every extracted variable is documented.
 WOMEN_COLUMN_GROUPS = {
@@ -70,16 +72,22 @@ WOMEN_COLUMN_GROUPS = {
         ["v213", "v214", "v215", "v226"],
     "anthropometry (v445 = BMI x100; v437/v438 weight/height kept for audit; no waist/hip)":
         ["v437", "v438", "v445"],
+    "physical activity (v481 = occupational activity level, if available in NFHS-5)":
+        ["v481"],
     "tobacco":
         ["v463a", "v463b", "v463c", "v463d", "v463f", "v463g", "v463j", "v463k", "v463l",
          "v463x", "v463z", "v463aa"],
     "alcohol":
         ["s720", "s721", "s722a", "s722b", "s722c", "s722d", "s722e", "s722x", "s723"],
-    "self-reported diabetes / hypertension (s728a feeds Target A; s728b/bb NOT used)":
+    "self-reported diabetes / hypertension (s728a feeds Target A; s728b now used as predictor)":
         ["s728a", "s728ab", "s728b", "s728bb"],
+    "v4 comorbidities (chronic conditions - NOT part of Target A, safe as predictors)":
+        ["s728c", "s728d", "s728e", "s728f", "s728g"],
+    "v4 BP medication (sb21 = currently taking BP-lowering medicine)":
+        ["sb21"],
     "blood pressure, 3 readings (systolic/diastolic)":
         ["sb18s", "sb18d", "sb25s", "sb25d", "sb29s", "sb29d"],
-    "blood glucose block (sb56, sb57, sb74 feed Target A; the rest is fasting/measurement context)":
+    "blood glucose block (sb56, sb57, sb74 feed Target A; sb53/54/55/73 now used as predictors)":
         ["sb53", "sb54", "sb55", "sb56", "sb57", "sb73", "sb74"],
     "diet frequency (9 items)":
         ["s731a", "s731b", "s731c", "s731d", "s731e", "s731f", "s731g", "s731h", "s731i"],
@@ -91,10 +99,19 @@ MEN_COLUMN_GROUPS = {
     "age": ["mv012", "mv013"],
     "education / wealth (wealth retained for later subgroup analysis only - NOT a predictor)":
         ["mv106", "mv190", "mv190a"],
-    "self-reported diabetes (sm627a feeds Target A)": ["sm627a", "sm627ab"],
+    "self-reported diabetes (sm627a feeds Target A; sm627b now used as predictor)":
+        ["sm627a", "sm627ab", "sm627b", "sm627bb"],
+    "v4 comorbidities (chronic conditions - NOT part of Target A, safe as predictors)":
+        ["sm627c", "sm627d", "sm627e", "sm627f", "sm627g"],
+    "v4 BP medication (smb21 = currently taking BP-lowering medicine)":
+        ["smb21"],
+    "v4 waist/hip circumference (men's MR file has these directly)":
+        ["smb305", "smb306"],
+    "physical activity (mv481 = occupational activity level, if available in NFHS-5)":
+        ["mv481"],
     "blood pressure, 3 readings (systolic/diastolic)":
         ["smb18s", "smb18d", "smb25s", "smb25d", "smb29s", "smb29d"],
-    "blood glucose block (smb56, smb57, smb74 feed Target A; the rest is context)":
+    "blood glucose block (smb56, smb57, smb74 feed Target A; smb53/54/55/73 now used as predictors)":
         ["smb53", "smb54", "smb55", "smb56", "smb57", "smb73", "smb74"],
     "tobacco (mv463aa is not administered in this survey - 100% missing)":
         ["mv463a", "mv463b", "mv463c", "mv463d", "mv463f", "mv463g", "mv463x", "mv463z", "mv463aa"],
@@ -170,6 +187,24 @@ def validate_counts(df, age_col, expected_rows, expected_age, label, strict=True
         print("  WARNING:", msg)
 
 
+def merge_women_waist_hip(women_df: pd.DataFrame, raw_dir: Path, chunksize: int = 50_000) -> pd.DataFrame:
+    """Women's waist/hip circumference (sh305/sh306) live in the Household/Person Recode (PR),
+    not the Individual Recode (IR). Merge on cluster (v001=hv001), household (v002=hv002),
+    and line number (v003=hvidx)."""
+    pr_path = find_raw_file(raw_dir, PR_FILE)
+    pr_cols = ["hv001", "hv002", "hvidx", "sh305", "sh306"]
+    print(f"  [women] reading waist/hip from PR file {pr_path.name} ...")
+    reader = pd.read_stata(pr_path, columns=pr_cols, convert_categoricals=False, chunksize=chunksize)
+    pr_chunks = [chunk.copy() for chunk in reader]
+    pr = pd.concat(pr_chunks, ignore_index=True)
+    pr.rename(columns={"hv001": "v001", "hv002": "v002", "hvidx": "v003"}, inplace=True)
+    n_before = len(women_df)
+    merged = women_df.merge(pr, on=["v001", "v002", "v003"], how="left")
+    n_matched = merged["sh305"].notna().sum()
+    print(f"  [women] waist/hip merge: {n_matched:,}/{n_before:,} rows matched ({100*n_matched/n_before:.1f}%)")
+    return merged
+
+
 def extract(sex: str, raw_dir: Path, out_dir: Path, chunksize: int = 20_000,
             strict: bool = True, validate: bool = True) -> Path:
     spec = SPECS[sex]
@@ -180,6 +215,8 @@ def extract(sex: str, raw_dir: Path, out_dir: Path, chunksize: int = 20_000,
     if validate:
         validate_counts(df, spec["age_col"], spec["expected_rows"], spec["expected_age_18_40"],
                         sex, strict)
+    if sex == "women":
+        df = merge_women_waist_hip(df, Path(raw_dir), chunksize)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / spec["out"]

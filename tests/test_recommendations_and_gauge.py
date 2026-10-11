@@ -123,9 +123,9 @@ def test_react_probability_scale_gauge():
     # Real React component rendering inline SVG
     assert "<svg" in content
     assert "gauge-svg" in content
-    assert "SCALE_MAX = 15" in content
+    assert "SCALE_MAX = 100" in content
 
-    # Clamping needle at 15% while displaying real probability number
+    # Clamping needle at 100% while displaying real probability number
     assert "clampedPercent" in content
     assert "needleFrac" in content
 

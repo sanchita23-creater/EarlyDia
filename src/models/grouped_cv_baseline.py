@@ -46,13 +46,39 @@ WOMEN_DIET = [f"diet_s731{c}" for c in "abcdefghi"]
 MEN_DIET = [f"diet_sm630{c}" for c in "abcdefghi"]
 COMMON_CAT_BASE = ["alc_drinks", "education", "residence"]
 
+# V3 features: physical activity, hypertension, fasting context, interactions
+V3_NUM_MEDIAN = ["physical_activity", "hypertension_self_report",
+                 "glucose_context_sb53", "glucose_context_sb54", "glucose_context_sb55", "glucose_context_sb73"]
+V3_MEN_NUM_MEDIAN = ["physical_activity", "hypertension_self_report",
+                     "glucose_context_smb53", "glucose_context_smb54", "glucose_context_smb55", "glucose_context_smb73"]
+V3_INTERACTIONS = ["age_x_bmi", "bmi_x_systolic", "bmi_x_diastolic", "age_x_systolic", "age_x_diastolic"]
+V3_MEN_INTERACTIONS = ["age_x_systolic", "age_x_diastolic"]
+
+# V4 features: comorbidities, BP medication, anthropometric (waist/hip)
+V4_NUM_MEDIAN = ["bp_medication", "waist_circumference", "hip_circumference",
+                 "waist_hip_ratio", "n_comorbidities",
+                 "comorbidity_respiratory", "comorbidity_thyroid",
+                 "comorbidity_heart", "comorbidity_cancer", "comorbidity_kidney"]
+
+# V5 features: BP aggregates, waist interactions, diet diversity, BMI categories
+V5_NUM_MEDIAN = ["mean_arterial_pressure", "pulse_pressure",
+                 "waist_x_age", "waist_x_bp_med", "comorbidity_x_waist",
+                 "diet_diversity_score"]
+V5_BMI_CATS = ["bmi_underweight", "bmi_normal", "bmi_overweight", "bmi_obese"]
+
+# V6 features: waist-to-height ratio, tobacco chewing, age categories
+V6_NUM_MEDIAN = ["waist_height_ratio", "tobacco_chewing"]
+V6_AGE_CATS = ["age_18_24", "age_25_34", "age_35_40"]
+
 
 def get_feature_lists(sex):
     if sex == "women":
-        num_median = NUM_MEDIAN_COMMON + ["bmi"]
+        num_median = (NUM_MEDIAN_COMMON + ["bmi"] + V3_NUM_MEDIAN + V3_INTERACTIONS +
+                      V4_NUM_MEDIAN + V5_NUM_MEDIAN + V5_BMI_CATS + V6_NUM_MEDIAN + V6_AGE_CATS)
         cat_no_missing = WOMEN_TOBACCO + WOMEN_ALC_TYPE + WOMEN_DIET + COMMON_CAT_BASE
     else:
-        num_median = NUM_MEDIAN_COMMON
+        num_median = (NUM_MEDIAN_COMMON + V3_MEN_NUM_MEDIAN + V3_MEN_INTERACTIONS +
+                      V4_NUM_MEDIAN + V5_NUM_MEDIAN + V6_AGE_CATS)
         cat_no_missing = MEN_TOBACCO + MEN_ALC_TYPE + MEN_DIET + COMMON_CAT_BASE
     return num_median, NUM_CONSTANT0, CAT_CONSTANT0, cat_no_missing
 

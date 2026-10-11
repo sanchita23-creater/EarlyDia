@@ -52,6 +52,28 @@ HGB_CONFIGS = {
                   min_samples_leaf=200, l2_regularization=5.0),
 }
 
+# XGBoost candidate configurations. We start with a sensible constrained search space.
+import xgboost as xgb
+XGB_CONFIGS = {
+    "xgb_default": dict(scale_pos_weight=20.0), # Approximate prevalence weighting
+    "xgb_A": dict(scale_pos_weight=15.0, learning_rate=0.05, n_estimators=200, max_depth=4,
+                  min_child_weight=10, subsample=0.8, colsample_bytree=0.8, reg_lambda=5.0),
+    "xgb_B": dict(scale_pos_weight=25.0, learning_rate=0.05, n_estimators=300, max_depth=3,
+                  min_child_weight=5, subsample=0.8, colsample_bytree=0.8, reg_alpha=2.0),
+    "xgb_C": dict(scale_pos_weight=30.0, learning_rate=0.03, n_estimators=300, max_depth=4,
+                  min_child_weight=20, subsample=0.7, colsample_bytree=0.7, reg_lambda=10.0),
+    "xgb_opt_1": dict(scale_pos_weight=20.0, learning_rate=0.1, n_estimators=300, max_depth=5, min_child_weight=20, subsample=1.0, colsample_bytree=0.6, reg_alpha=1.0, reg_lambda=10.0),
+    "xgb_opt_2": dict(scale_pos_weight=25.0, learning_rate=0.05, n_estimators=200, max_depth=4, min_child_weight=1, subsample=0.6, colsample_bytree=0.8, reg_alpha=5.0, reg_lambda=1.0),
+    "xgb_opt_3": dict(scale_pos_weight=15.0, learning_rate=0.01, n_estimators=300, max_depth=3, min_child_weight=10, subsample=0.8, colsample_bytree=1.0, reg_alpha=0, reg_lambda=5.0),
+    "xgb_opt_4": dict(scale_pos_weight=30.0, learning_rate=0.03, n_estimators=100, max_depth=6, min_child_weight=5, subsample=0.6, colsample_bytree=1.0, reg_alpha=1.0, reg_lambda=10.0),
+    "xgb_opt_5": dict(scale_pos_weight=10.0, learning_rate=0.1, n_estimators=200, max_depth=3, min_child_weight=1, subsample=1.0, colsample_bytree=0.6, reg_alpha=5.0, reg_lambda=10.0),
+    "xgb_opt_6": dict(scale_pos_weight=25.0, learning_rate=0.01, n_estimators=100, max_depth=5, min_child_weight=5, subsample=0.8, colsample_bytree=0.6, reg_alpha=0, reg_lambda=1.0),
+    "xgb_opt_7": dict(scale_pos_weight=10.0, learning_rate=0.03, n_estimators=300, max_depth=4, min_child_weight=20, subsample=0.6, colsample_bytree=1.0, reg_alpha=1.0, reg_lambda=5.0),
+    "xgb_opt_8": dict(scale_pos_weight=15.0, learning_rate=0.05, n_estimators=100, max_depth=6, min_child_weight=10, subsample=1.0, colsample_bytree=0.8, reg_alpha=0, reg_lambda=10.0),
+    "xgb_opt_9": dict(scale_pos_weight=20.0, learning_rate=0.01, n_estimators=200, max_depth=3, min_child_weight=1, subsample=0.6, colsample_bytree=1.0, reg_alpha=5.0, reg_lambda=5.0),
+    "xgb_opt_10": dict(scale_pos_weight=30.0, learning_rate=0.1, n_estimators=100, max_depth=4, min_child_weight=20, subsample=0.8, colsample_bytree=0.8, reg_alpha=1.0, reg_lambda=1.0),
+}
+
 
 def parse_flags(s):
     flags = {f.strip() for f in (s or "").split(",") if f.strip() and f.strip() != "none"}
@@ -132,6 +154,47 @@ def build_preprocessor_v2(sex, flags):
     return ColumnTransformer(tf, sparse_threshold=0.0)
 
 
+CATBOOST_CONFIGS = {
+    "cb_default": dict(depth=6, learning_rate=0.05, iterations=300,
+                       auto_class_weights="Balanced", random_seed=42, verbose=0),
+    "cb_A": dict(depth=4, learning_rate=0.05, iterations=300,
+                 auto_class_weights="Balanced", random_seed=42, verbose=0,
+                 l2_leaf_reg=5.0, min_data_in_leaf=200),
+    "cb_B": dict(depth=6, learning_rate=0.03, iterations=500,
+                 auto_class_weights="Balanced", random_seed=42, verbose=0,
+                 l2_leaf_reg=10.0, min_data_in_leaf=300, subsample=0.8),
+    "cb_C": dict(depth=4, learning_rate=0.03, iterations=500,
+                 auto_class_weights="Balanced", random_seed=42, verbose=0,
+                 l2_leaf_reg=3.0, min_data_in_leaf=100, border_count=128),
+    "cb_D": dict(depth=8, learning_rate=0.05, iterations=200,
+                 auto_class_weights="Balanced", random_seed=42, verbose=0,
+                 l2_leaf_reg=1.0, min_data_in_leaf=50, random_strength=2.0),
+}
+
+LIGHTGBM_CONFIGS = {
+    "lgbm_default": dict(n_estimators=300, learning_rate=0.05, max_depth=6,
+                          num_leaves=31, min_child_samples=200, subsample=0.8,
+                          colsample_bytree=0.8, reg_alpha=1.0, reg_lambda=5.0,
+                          is_unbalance=True, random_state=42, n_jobs=-1, verbose=-1),
+    "lgbm_A": dict(n_estimators=300, learning_rate=0.05, max_depth=4,
+                    num_leaves=15, min_child_samples=300, subsample=0.8,
+                    colsample_bytree=0.8, reg_alpha=5.0, reg_lambda=10.0,
+                    is_unbalance=True, random_state=42, n_jobs=-1, verbose=-1),
+    "lgbm_B": dict(n_estimators=500, learning_rate=0.03, max_depth=6,
+                    num_leaves=31, min_child_samples=200, subsample=0.7,
+                    colsample_bytree=0.7, reg_alpha=0.5, reg_lambda=5.0,
+                    is_unbalance=True, random_state=42, n_jobs=-1, verbose=-1),
+    "lgbm_C": dict(n_estimators=500, learning_rate=0.03, max_depth=4,
+                    num_leaves=15, min_child_samples=100, subsample=0.8,
+                    colsample_bytree=0.8, reg_alpha=2.0, reg_lambda=3.0,
+                    is_unbalance=True, random_state=42, n_jobs=-1, verbose=-1),
+    "lgbm_D": dict(n_estimators=200, learning_rate=0.05, max_depth=8,
+                    num_leaves=63, min_child_samples=50, subsample=0.8,
+                    colsample_bytree=0.6, reg_alpha=0.1, reg_lambda=1.0,
+                    is_unbalance=True, random_state=42, n_jobs=-1, verbose=-1),
+}
+
+
 def build_pipeline(sex, flags, model_name):
     pre = build_preprocessor_v2(sex, flags)
     if model_name == "lr":
@@ -143,6 +206,18 @@ def build_pipeline(sex, flags, model_name):
         if "state_native" in flags:
             kw["categorical_features"] = [0]
         clf = HistGradientBoostingClassifier(random_state=SEED, **kw)
+    elif model_name in CATBOOST_CONFIGS:
+        from catboost import CatBoostClassifier
+        clf = CatBoostClassifier(**CATBOOST_CONFIGS[model_name])
+    elif model_name in LIGHTGBM_CONFIGS:
+        from lightgbm import LGBMClassifier
+        clf = LGBMClassifier(**LIGHTGBM_CONFIGS[model_name])
+    elif model_name in XGB_CONFIGS:
+        kw = dict(XGB_CONFIGS[model_name])
+        clf = xgb.XGBClassifier(random_state=SEED, use_label_encoder=False, eval_metric="logloss", n_jobs=-1, **kw)
+    elif model_name == "rf":
+        from sklearn.ensemble import RandomForestClassifier
+        clf = RandomForestClassifier(n_estimators=300, max_depth=10, min_samples_leaf=10, class_weight="balanced_subsample", random_state=SEED, n_jobs=-1)
     else:
         raise ValueError(f"unknown model {model_name}")
     return Pipeline([("pre", pre), ("clf", clf)])

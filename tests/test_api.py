@@ -18,7 +18,7 @@ from src.inference.predict_module import EarlyDiaPredictor  # noqa: E402
 from src.inference.predict_module_v2 import EarlyDiaPredictorV2  # noqa: E402
 
 THRESHOLDS_V1 = {"women": 0.026, "men": 0.027}
-THRESHOLDS_V2 = {"women": 0.024, "men": 0.029}
+THRESHOLDS_V2 = {"women": 0.026, "men": 0.028}
 
 
 @pytest.fixture(scope="module")
@@ -200,7 +200,7 @@ def test_results_page_displays_model_version_and_screening_threshold(client):
     r = client.post("/api/predict", json=body("women"))
     assert r.status_code == 200
     data = r.json()
-    assert "cutoff" in data and data["cutoff"] == 0.024
+    assert "cutoff" in data and data["cutoff"] == THRESHOLDS_V2["women"]
     assert data["technical"]["version"] == "v2"
 
     results_jsx = (ROOT / "frontend" / "src" / "pages" / "Results.jsx").read_text(encoding="utf-8")

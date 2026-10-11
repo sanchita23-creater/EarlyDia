@@ -1,8 +1,8 @@
-// EarlyDia - Semicircular screening probability gauge (inline SVG, scale 0-15%).
-// Pure presentation component rendering SVG elements directly in React.
+// EarlyDia - Semicircular screening probability gauge (inline SVG, scale 0-100%).
+// Pure presentation component rendering colorful risk zones: Green (Low), Yellow (Medium), Orange (Elevated), Red (High).
 import React from "react";
 
-export const SCALE_MAX = 15;
+export const SCALE_MAX = 100;
 
 export const formatPercent = (v) => {
   const num = Number(v);
@@ -31,9 +31,17 @@ export const makeArcBand = (cx, cy, rOut, rIn, f1, f2) => {
   );
 };
 
-export default function ProbabilityScale({ percent = 0, cutoffPercent = 2.4, flagged = false }) {
+export const getRiskTier = (percent, cutoff) => {
+  const p = Number(percent) || 0;
+  if (p >= 60) return { key: "very-high", label: "Very High", color: "#EF4444" };
+  if (p >= 40) return { key: "high", label: "High", color: "#FB923C" };
+  if (p >= 20) return { key: "moderate", label: "Moderate", color: "#FACC15" };
+  return { key: "low", label: "Low", color: "#10B981" };
+};
+
+export default function ProbabilityScale({ percent = 0, cutoffPercent = 21.2, flagged = false }) {
   const numPercent = Number(percent) || 0;
-  const numCutoff = Number(cutoffPercent) || 2.4;
+  const numCutoff = Number(cutoffPercent) || 21.2;
 
   const cutoffFrac = Math.min(1, Math.max(0, numCutoff / SCALE_MAX));
   const clampedPercent = Math.min(SCALE_MAX, Math.max(0, numPercent));
@@ -71,9 +79,11 @@ export default function ProbabilityScale({ percent = 0, cutoffPercent = 2.4, fla
   const valueLabel = formatPercent(numPercent);
   const cutoffLabel = formatPercent(numCutoff);
   const isClamped = numPercent > SCALE_MAX;
+  const tier = getRiskTier(numPercent, numCutoff);
 
   const ariaText = `Your estimated screening likelihood is ${valueLabel}. ` +
     `Screening cutoff is ${cutoffLabel}. ` +
+    `Risk Tier: ${tier.label}. ` +
     `Status: ${flagged ? "At or above cutoff" : "Below cutoff"}. ` +
     `This does not mean you have diabetes.`;
 
@@ -93,24 +103,30 @@ export default function ProbabilityScale({ percent = 0, cutoffPercent = 2.4, fla
           className="gauge-track"
         />
 
-        {/* Zone 1: Below cutoff */}
-        {cutoffFrac > 0 && (
-          <path
-            d={makeArcBand(cx, cy, rOut, rIn, 0, cutoffFrac)}
-            className="gauge-zone-below"
-          />
-        )}
+        {/* Colorful Risk Zones along the semicircle arc */}
+        {/* Low: 0-20% (Green) */}
+        <path
+          d={makeArcBand(cx, cy, rOut, rIn, 0, 0.20)}
+          className="gauge-zone-band gauge-zone-green gauge-zone-below"
+        />
+        {/* Medium: 20-40% (Yellow) */}
+        <path
+          d={makeArcBand(cx, cy, rOut, rIn, 0.20, 0.40)}
+          className="gauge-zone-band gauge-zone-yellow"
+        />
+        {/* Elevated: 40-60% (Orange) */}
+        <path
+          d={makeArcBand(cx, cy, rOut, rIn, 0.40, 0.60)}
+          className="gauge-zone-band gauge-zone-orange"
+        />
+        {/* High: 60-100% (Red) */}
+        <path
+          d={makeArcBand(cx, cy, rOut, rIn, 0.60, 1.0)}
+          className="gauge-zone-band gauge-zone-red gauge-zone-above"
+        />
 
-        {/* Zone 2: At or above cutoff */}
-        {cutoffFrac < 1 && (
-          <path
-            d={makeArcBand(cx, cy, rOut, rIn, cutoffFrac, 1)}
-            className="gauge-zone-above"
-          />
-        )}
-
-        {/* Axis ticks: 0%, 5%, 10%, 15% */}
-        {[0, 5, 10, 15].map((val) => {
+        {/* Axis ticks: 0%, 20%, 40%, 60%, 80%, 100% */}
+        {[0, 20, 40, 60, 80, 100].map((val) => {
           const f = val / SCALE_MAX;
           const cos = Math.cos(f * Math.PI);
           const sin = Math.sin(f * Math.PI);
@@ -169,37 +185,60 @@ export default function ProbabilityScale({ percent = 0, cutoffPercent = 2.4, fla
           {`Screening cutoff ${cutoffLabel}`}
         </text>
 
-        {/* Needle indicator */}
+        {/* Needle indicator styled to match active category color */}
         <polygon
           points={`${b1x.toFixed(2)},${b1y.toFixed(2)} ${tipX.toFixed(2)},${tipY.toFixed(2)} ${b2x.toFixed(2)},${b2y.toFixed(2)}`}
           className="gauge-needle"
+          style={{ fill: tier.color }}
         />
-        <circle cx={cx} cy={cy} r="10" className="gauge-hub-outer" />
+        <circle cx={cx} cy={cy} r="10" className="gauge-hub-outer" style={{ fill: tier.color }} />
         <circle cx={cx} cy={cy} r="4" className="gauge-hub-inner" />
 
         {/* Centered probability number */}
-        <text x={cx} y={cy - 38} textAnchor="middle" className="gauge-readout-value">
+        <text x={cx} y={cy - 40} textAnchor="middle" className="gauge-readout-value">
           {valueLabel}
         </text>
-        <text x={cx} y={cy - 16} textAnchor="middle" className="gauge-readout-sub">
+        <text x={cx} y={cy - 18} textAnchor="middle" className="gauge-readout-sub">
           Screening probability
         </text>
+        <text
+          x={cx}
+          y={cy + 22}
+          textAnchor="middle"
+          className={`gauge-tier-pill gauge-tier-${tier.key}`}
+          style={{ fill: tier.color }}
+        >
+          {`${tier.label}${flagged ? " · Flagged" : ""}`}
+        </text>
+
         {isClamped && (
-          <text x={cx} y={cy + 18} textAnchor="middle" className="gauge-clamped-note">
-            (Scale max 15%; needle clamped)
+          <text x={cx} y={cy + 38} textAnchor="middle" className="gauge-clamped-note">
+            (Scale max 100%; needle clamped)
           </text>
         )}
       </svg>
 
-      {/* Two calm zones legend */}
+      {/* Colorful Risk zones & Cutoff legend */}
       <div className="gauge-legend">
         <span className="gauge-legend-item">
-          <span className="gauge-legend-swatch swatch-below" />
-          <span>Below cutoff (&lt;{cutoffLabel})</span>
+          <span className="gauge-legend-swatch swatch-green" />
+          <span>Low (&lt;20%)</span>
         </span>
         <span className="gauge-legend-item">
-          <span className="gauge-legend-swatch swatch-above" />
-          <span>At or above cutoff (≥{cutoffLabel})</span>
+          <span className="gauge-legend-swatch swatch-yellow" />
+          <span>Moderate (20–40%)</span>
+        </span>
+        <span className="gauge-legend-item">
+          <span className="gauge-legend-swatch swatch-orange" />
+          <span>High (40–60%)</span>
+        </span>
+        <span className="gauge-legend-item">
+          <span className="gauge-legend-swatch swatch-red" />
+          <span>Very High (≥60%)</span>
+        </span>
+        <span className="gauge-legend-item">
+          <span className="gauge-legend-swatch swatch-cutoff" />
+          <span>Cutoff (≥{cutoffLabel})</span>
         </span>
       </div>
     </div>

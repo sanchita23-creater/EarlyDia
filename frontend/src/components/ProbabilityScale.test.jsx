@@ -46,12 +46,42 @@ describe("ProbabilityScale (semicircular gauge component)", () => {
     expect(html26).toContain("Screening cutoff 2.6%");
   });
 
-  it("clamps needle when probability exceeds 15% while displaying real number", () => {
+  it("clamps needle when probability exceeds 100% while displaying real number", () => {
     const html = renderToString(
-      <ProbabilityScale percent={18.5} cutoffPercent={2.4} flagged={true} />
+      <ProbabilityScale percent={108.5} cutoffPercent={21.2} flagged={true} />
     );
-    expect(html).toContain("18.5%");
+    expect(html).toContain("108.5%");
     expect(html).toContain("needle clamped");
+  });
+
+  it("renders colorful risk bands for green, yellow, orange, and red tiers", () => {
+    const html = renderToString(
+      <ProbabilityScale percent={27.4} cutoffPercent={21.2} flagged={true} />
+    );
+    expect(html).toContain("gauge-zone-green");
+    expect(html).toContain("gauge-zone-yellow");
+    expect(html).toContain("gauge-zone-orange");
+    expect(html).toContain("gauge-zone-red");
+    expect(html).toContain("Moderate");
+    expect(html).toContain("Moderate (20–40%)");
+  });
+
+  it("assigns correct risk tier and matching color for Low, Moderate, High, and Very High", () => {
+    const low = renderToString(<ProbabilityScale percent={12.0} cutoffPercent={21.2} />);
+    expect(low).toContain("Low");
+    expect(low).toContain("#10B981");
+
+    const mod = renderToString(<ProbabilityScale percent={32.0} cutoffPercent={21.2} />);
+    expect(mod).toContain("Moderate");
+    expect(mod).toContain("#FACC15");
+
+    const high = renderToString(<ProbabilityScale percent={48.0} cutoffPercent={21.2} />);
+    expect(high).toContain("High");
+    expect(high).toContain("#FB923C");
+
+    const veryHigh = renderToString(<ProbabilityScale percent={72.0} cutoffPercent={21.2} />);
+    expect(veryHigh).toContain("Very High");
+    expect(veryHigh).toContain("#EF4444");
   });
 
   it("includes accessible aria-label with cutoff, value, and disclaimer", () => {
@@ -65,7 +95,7 @@ describe("ProbabilityScale (semicircular gauge component)", () => {
     expect(html).toContain("This does not mean you have diabetes");
   });
 
-  it("defines scale maximum as 15%", () => {
-    expect(SCALE_MAX).toBe(15);
+  it("defines scale maximum as 100%", () => {
+    expect(SCALE_MAX).toBe(100);
   });
 });

@@ -41,10 +41,28 @@ EXPERIMENTS = {
     "eng":          ("eng", "hgb_default"),
     "compact":      ("compact", "hgb_default"),
     "eng_compact":  ("eng,compact", "hgb_default"),
+    "rf_base":      ("state", "rf"),
+    "xgb_default":  ("state", "xgb_default"),
+    "xgb_A":        ("state", "xgb_A"),
+    "xgb_B":        ("state", "xgb_B"),
+    "xgb_C":        ("state", "xgb_C"),
+    "xgb_opt_1":    ("state,eng", "xgb_opt_1"),
+    "xgb_opt_2":    ("state,eng", "xgb_opt_2"),
+    "xgb_opt_3":    ("state,eng", "xgb_opt_3"),
+    "xgb_opt_4":    ("state,eng", "xgb_opt_4"),
+    "xgb_opt_5":    ("state,eng", "xgb_opt_5"),
+    "xgb_opt_6":    ("state,eng", "xgb_opt_6"),
+    "xgb_opt_7":    ("state,eng", "xgb_opt_7"),
+    "xgb_opt_8":    ("state,eng", "xgb_opt_8"),
+    "xgb_opt_9":    ("state,eng", "xgb_opt_9"),
+    "xgb_opt_10":   ("state,eng", "xgb_opt_10"),
 }
 GROUPS = {"baseline": ["v1_repro", "lr_base"], "state": ["state", "state_native"],
           "wealth": ["wealth_v190", "wealth_v190a"], "tune": ["tune_B", "tune_C", "tune_D", "tune_E"],
-          "eng": ["eng", "compact", "eng_compact"]}
+          "eng": ["eng", "compact", "eng_compact"],
+          "xgb": ["xgb_default", "xgb_A", "xgb_B", "xgb_C", "xgb_eng"],
+          "xgb_tune": [f"xgb_opt_{i}" for i in range(1, 11)],
+          "rf": ["rf_base"]}
 V1_LOCKED_OOF_REF = {  # configs/threshold_selection_summary.json (locked v1, for sanity comparison only)
     "women": dict(threshold=0.026, sensitivity=0.7548, specificity=0.4829, ppv=0.0464, flag_rate=0.5248),
     "men": dict(threshold=0.027, sensitivity=0.7623, specificity=0.4693, ppv=0.0522, flag_rate=0.5393)}

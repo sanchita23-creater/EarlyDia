@@ -214,27 +214,63 @@ details[open] > summary::after { transform: rotate(-135deg); }
 .gauge-container { max-width: 520px; margin: 16px auto 8px; display: flex; flex-direction: column; align-items: center; width: 100%; }
 .gauge-svg { width: 100%; height: auto; max-width: 480px; display: block; overflow: visible; font-family: inherit; }
 .gauge-track { fill: var(--track); stroke: var(--border); stroke-width: 1px; }
-.gauge-zone-below { fill: var(--gauge-zone-low); }
-.gauge-zone-above { fill: var(--gauge-zone-high); }
+
+/* Vibrant Tiered Risk Bands: Low (Green), Medium (Yellow), Elevated (Orange), High (Red) */
+.gauge-zone-green { fill: #10B981; fill-opacity: 0.88; }
+.gauge-zone-yellow { fill: #FACC15; fill-opacity: 0.88; }
+.gauge-zone-orange { fill: #FB923C; fill-opacity: 0.88; }
+.gauge-zone-red { fill: #EF4444; fill-opacity: 0.88; }
+
+:root[data-theme="dark"] .gauge-zone-green { fill: #10B981; fill-opacity: 0.85; }
+:root[data-theme="dark"] .gauge-zone-yellow { fill: #FACC15; fill-opacity: 0.85; }
+:root[data-theme="dark"] .gauge-zone-orange { fill: #FB923C; fill-opacity: 0.85; }
+:root[data-theme="dark"] .gauge-zone-red { fill: #EF4444; fill-opacity: 0.85; }
+
 .gauge-tick-line { stroke: var(--muted); stroke-width: 1.5px; }
 .gauge-axis-label { fill: var(--muted); font-size: 13px; font-weight: 700; }
-.gauge-cutoff-tick { stroke: var(--navy); stroke-width: 3.5px; stroke-linecap: round; }
-:root[data-theme="dark"] .gauge-cutoff-tick { stroke: var(--accent); }
+.gauge-cutoff-tick { stroke: var(--text); stroke-width: 3.5px; stroke-linecap: round; }
+:root[data-theme="dark"] .gauge-cutoff-tick { stroke: #FFFFFF; }
 .gauge-cutoff-leader { stroke: var(--muted); stroke-width: 1.2px; stroke-dasharray: 2 2; }
 .gauge-cutoff-label { fill: var(--text); font-size: 13px; font-weight: 700; }
-.gauge-needle { fill: var(--navy); stroke: var(--surface); stroke-width: 1.5px; stroke-linejoin: round; }
-:root[data-theme="dark"] .gauge-needle { fill: var(--accent); stroke: var(--surface); }
-.gauge-hub-outer { fill: var(--navy); stroke: var(--surface); stroke-width: 2.5px; }
-:root[data-theme="dark"] .gauge-hub-outer { fill: var(--accent); }
+.gauge-needle { fill: var(--text); stroke: var(--surface); stroke-width: 1.5px; stroke-linejoin: round; }
+:root[data-theme="dark"] .gauge-needle { fill: #F2F5FA; stroke: var(--surface); }
+.gauge-hub-outer { fill: var(--text); stroke: var(--surface); stroke-width: 2.5px; }
+:root[data-theme="dark"] .gauge-hub-outer { fill: #F2F5FA; }
 .gauge-hub-inner { fill: var(--surface); }
 .gauge-readout-value { fill: var(--text); font-size: 38px; font-weight: 800; letter-spacing: -0.03em; }
 .gauge-readout-sub { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.gauge-tier-pill { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
+.gauge-tier-low { fill: #10B981; }
+.gauge-tier-moderate, .gauge-tier-medium { fill: #D97706; }
+:root[data-theme="dark"] .gauge-tier-moderate, :root[data-theme="dark"] .gauge-tier-medium { fill: #FACC15; }
+.gauge-tier-high, .gauge-tier-elevated { fill: #EA580C; }
+:root[data-theme="dark"] .gauge-tier-high, :root[data-theme="dark"] .gauge-tier-elevated { fill: #FB923C; }
+.gauge-tier-very-high { fill: #EF4444; }
 .gauge-clamped-note { fill: var(--muted); font-size: 11px; font-style: italic; }
-.gauge-legend { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 8px; font-size: .85rem; color: var(--muted); }
-.gauge-legend-item { display: inline-flex; align-items: center; gap: 7px; }
-.gauge-legend-swatch { width: 13px; height: 13px; border-radius: 3px; border: 1px solid var(--border); }
-.swatch-below { background: var(--gauge-zone-low); }
-.swatch-above { background: var(--gauge-zone-high); }
+.gauge-legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 10px; font-size: .85rem; color: var(--muted); }
+.gauge-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.gauge-legend-swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border); }
+.swatch-green { background: #10B981; border-color: #059669; }
+.swatch-yellow { background: #FACC15; border-color: #D97706; }
+.swatch-orange { background: #FB923C; border-color: #EA580C; }
+.swatch-red { background: #EF4444; border-color: #DC2626; }
+.swatch-cutoff { background: var(--text); border-radius: 1px; width: 4px; height: 13px; border: none; }
+.swatch-below { background: #10B981; }
+.swatch-above { background: #EF4444; }
+
+/* Technical Details - structured sections */
+.tech-subhead { font-size: 1.02rem; font-weight: 700; color: var(--text); margin: 12px 0 6px; }
+.tech-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 8px 0 12px; }
+.tech-table th, .tech-table td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.tech-table th { background: var(--surface-alt); font-weight: 700; color: var(--text); font-size: .82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tech-badge { display: inline-block; padding: 2px 7px; border-radius: 999px; font-size: .75rem; font-weight: 700; line-height: 1.2; vertical-align: middle; }
+.tech-badge-best { background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); }
+:root[data-theme="dark"] .tech-badge-best { background: rgba(16, 185, 129, 0.22); color: #34D399; }
+.tech-badge-approved { background: rgba(59, 130, 246, 0.15); color: #2563EB; border: 1px solid rgba(59, 130, 246, 0.3); }
+:root[data-theme="dark"] .tech-badge-approved { background: rgba(59, 130, 246, 0.22); color: #60A5FA; }
+.tech-flow { display: flex; flex-direction: column; gap: 8px; margin: 6px 0 12px; }
+.tech-flow-step { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; line-height: 1.45; }
+.tech-flow-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-alt); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .75rem; flex-shrink: 0; margin-top: 1px; color: var(--text); }
 
 /* Technical Details - research evidence table */
 .evidence-section { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }

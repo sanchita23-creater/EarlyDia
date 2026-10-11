@@ -21,6 +21,7 @@ COPY backend/ backend/
 COPY src/ src/
 COPY configs/ configs/
 COPY models/ models/
+COPY models_v2/ models_v2/
 COPY reports/ reports/
 COPY --from=web /web/dist frontend/dist
 EXPOSE 8000

@@ -55,3 +55,14 @@ node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+
+# Local debugging artifacts
+catboost_info/
+analyze.py
+check.py
+script.py
+test_out.txt
+tree.txt
+audit_report.txt
+
+# Local experiment outputs

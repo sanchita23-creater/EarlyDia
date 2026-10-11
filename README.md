@@ -415,7 +415,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:5173>. This is the demo.
+Open <http://localhost:5174>. This is the demo.
 
 *Single-process alternative:* `npm run build` in `frontend`, then only the FastAPI command above - the
 backend serves the built app at <http://localhost:8000>.

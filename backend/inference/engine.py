@@ -19,6 +19,10 @@ SEXES = ("women", "men")
 @lru_cache(maxsize=None)
 def get_predictor(sex: str, version: str = "v2"):
     if version == "v2":
+        from src.models.model_registry import get_production_model
+        # Verify the model is approved in the registry.
+        # EarlyDiaPredictorV2 automatically loads the file configured in configs.
+        _ = get_production_model(sex)
         return EarlyDiaPredictorV2(sex)
     return EarlyDiaPredictor(sex)
 

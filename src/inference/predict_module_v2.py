@@ -5,8 +5,8 @@ Loads the trained and calibrated v2 production pipelines saved under models_v2/
 and applies them to a single person's input. Contains NO training or fitting logic.
 
 Thresholds are read directly from the saved v2 artifacts:
-  - models_v2/women_v2_pipeline.pkl (candidate state_native_B, threshold 0.024)
-  - models_v2/men_v2_pipeline.pkl (candidate lr_state, threshold 0.029)
+  - models_v2/women_v2_pipeline.pkl (candidate lgbm_D, threshold 0.212)
+  - models_v2/men_v2_pipeline.pkl (candidate cb_B, threshold 0.300)
 
 This is a RESEARCH/PROTOTYPE SCREENING output on cross-sectional data,
 not a diagnosis or future diabetes prediction.
@@ -68,11 +68,11 @@ class EarlyDiaPredictorV2:
         self.calibration_method = artifact["calibration_method"]
         self.feature_cols = artifact["feature_cols"]
         self.threshold = artifact["selected_threshold"]
-        self.candidate = artifact.get("candidate", "state_native_B" if sex == "women" else "lr_state")
+        self.candidate = artifact.get("candidate", "lgbm_D" if sex == "women" else "cb_B")
         self.model_name = (
-            "HistGradientBoosting (v2 - state_native_B)"
+            "LightGBM (v2 - lgbm_D)"
             if sex == "women"
-            else "LogisticRegression (v2 - lr_state)"
+            else "CatBoost (v2 - cb_B)"
         )
         self.version = "v2"
 

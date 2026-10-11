@@ -55,22 +55,22 @@
   "prevalence_relative_tolerance": 0.15,
   "women": {
     "selected_seed": 42,
-    "train_rows": 347833,
-    "test_rows": 86669,
-    "train_psus": 24076,
-    "test_psus": 6020,
-    "overall_prevalence": 0.031850256155322644,
-    "train_prevalence": 0.03222523452346385,
-    "test_prevalence": 0.030345336856315408
+    "train_rows": 199514,
+    "test_rows": 50244,
+    "train_psus": 23967,
+    "test_psus": 5992,
+    "overall_prevalence": 0.23319,
+    "train_prevalence": 0.2322,
+    "test_prevalence": 0.23708
   },
   "men": {
     "selected_seed": 42,
-    "train_rows": 44684,
-    "test_rows": 11408,
-    "train_psus": 7200,
-    "test_psus": 1800,
-    "overall_prevalence": 0.036119232689153534,
-    "train_prevalence": 0.036903589651776925,
-    "test_prevalence": 0.033046984572230015
+    "train_rows": 29151,
+    "test_rows": 7113,
+    "train_psus": 6987,
+    "test_psus": 1747,
+    "overall_prevalence": 0.31704,
+    "train_prevalence": 0.31762,
+    "test_prevalence": 0.31464
   }
 }
