@@ -290,7 +290,7 @@ diabetes-range status").
 
 ## Limitations
 
-- **Proxy research target**: Target A is a research-defined construct (known diabetes or random glucose ≥ 200 mg/dL), not a clinical diagnostic protocol.
+- **Proxy research target**: Target A is a research-defined construct (the code currently uses the redefined target: known diabetes or glucose >= 141 mg/dL; negatives <= 100; 101-140 excluded; see the note in the Target definition section), not a clinical diagnostic protocol.
 - A single **random (non-fasting)** glucose measurement has known limitations for diabetes classification.
 - NFHS-5 is **cross-sectional** - EarlyDia does not predict *future* diabetes.
 - **No external/clinical validation** has been performed.
@@ -319,7 +319,7 @@ decisions. Anyone with health concerns should consult a qualified healthcare pro
   evaluation configurations, and exact pipeline stage orders).
 - **Tests**: `tests/` (see below) - run with `python -m pytest tests -v` (or `python run_tests.py`).
 - **Model artifacts**:
-  - `models_v2/{women,men}_v2_pipeline.pkl`: Production v2 pipelines (women threshold 0.024, men threshold 0.029).
+  - `models_v2/{women,men}_v2_pipeline.pkl`: Production v2 pipelines (women threshold 0.212, men threshold ~0.30 [artifact value 0.299]).
   - `models/{women,men}_production_pipeline.pkl`: Legacy v1 pipelines (women threshold 0.026, men threshold 0.027; retained for backward compatibility).
 - **Extraction script**: `src/data/extract_nfhs.py` - see
   [`docs/DATA_REPRODUCTION.md`](docs/DATA_REPRODUCTION.md).
@@ -329,7 +329,7 @@ decisions. Anyone with health concerns should consult a qualified healthcare pro
 1. Start FastAPI: `uvicorn backend.api.main:app --reload --port 8000`
 2. Start React: `cd frontend && npm run dev` (open http://localhost:5173).
 3. Follow the 3-minute flow in [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md): Landing -> Profile (select State) -> Lifestyle -> Health -> Review -> Result.
-4. Note the output: calibrated screening probability, status flag, model version & threshold line (`Model v2 - screening threshold 0.024`), regional state disclosure, and honest scope boundaries.
+4. Note the output: calibrated screening probability, status flag, model version & threshold line (`Model v2 - screening threshold 21.2% (women) / ~30% (men)`), regional state disclosure, and honest scope boundaries.
 
 ## Project structure
 
@@ -347,7 +347,7 @@ EarlyDia/
 ├── docs/                        DATA_REPRODUCTION.md, RESEARCH_EVIDENCE.md, DEMO_SCRIPT.md
 ├── experiments/                 exploratory scratch scripts and candidate evaluations
 ├── models/                      v1 legacy production artifacts (women 0.026, men 0.027 - backward compatibility)
-├── models_v2/                   v2 production pipeline artifacts (women 0.024, men 0.029)
+├── models_v2/                   v2 production pipeline artifacts (women 0.212, men ~0.30 [artifact value 0.299])
 ├── reports/                     v2 reports (final_women_state_native_B.json, final_men_lr_state.json), explainability/, demo/
 ├── src/
 │   ├── inference/               predict_module_v2.py (v2 production), predict_module.py (v1 legacy)
