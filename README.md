@@ -88,6 +88,16 @@ challenges honestly rather than let them silently inflate reported performance.
 
 ## Target definition
 
+> [!IMPORTANT]
+> **Implementation Note on Target Definition & Evaluation Metrics:**
+> The codebase (`src/target/women_target_construction.py` and `src/target/men_target_construction.py`) currently uses a **redefined target**:
+> - **Positive:** Known diabetes ($K$) OR valid glucose &ge; 141 mg/dL
+> - **Negative:** All three flags explicitly "No" AND valid glucose &le; 100 mg/dL
+> - **Excluded:** Glucose 101&ndash;140 mg/dL (ambiguous intermediate zone)
+>
+> This differs from the original &ge; 200 / &le; 140 definition described below.
+> Furthermore, the original-target held-out v1 test results (women ROC-AUC 0.685, PPV 4.4%; men ROC-AUC 0.665, PPV 4.5%) are **not comparable** to the ~0.80 cross-validation figures reported for v2, and the v2 production models (LightGBM women, CatBoost men) have **no separate held-out evaluation yet** (their ~0.80 figures reflect 5-fold PSU-grouped out-of-fold cross-validation on development data under the redefined target).
+
 **Target A** (locked, research-defined - not a clinical diagnosis):
 
 ```
@@ -189,22 +199,26 @@ Details and citation: `docs/FEATURE_RESEARCH_EVIDENCE.md`; code: `backend/api/id
 
 | | Women (v2 Production) | Men (v2 Production) | Women (v1 Legacy) | Men (v1 Legacy) |
 |---|---|---|---|---|
-| **Model** | HistGradientBoosting (`hgb_B`, `class_weight="balanced"`) | Logistic Regression (`class_weight="balanced"`) | HistGradientBoosting (`hgb_default`, `class_weight="balanced"`) | HistGradientBoosting (`hgb_default`, `class_weight="balanced"`) |
-| **State Feature** | Native ordinal categorical (`state_native`) | One-hot categorical (`state`) | None | None |
-| **Calibration** | Isotonic | Sigmoid (Platt) | Isotonic | Sigmoid (Platt) |
-| **Screening Threshold** | **0.024** | **0.029** | **0.026** (legacy) | **0.027** (legacy) |
-| **Threshold Rule** | Highest 0.001-grid threshold with OOF sensitivity ≥ 75% | Same rule | Same rule | Same rule |
+| **Model** | LightGBM (`lgbm_D`, `is_unbalance=True`) | CatBoost (`cb_B`, `auto_class_weights="Balanced"`) | HistGradientBoosting (`hgb_default`, `class_weight="balanced"`) | HistGradientBoosting (`hgb_default`, `class_weight="balanced"`) |
+| **State Feature** | One-hot categorical (`state`) | One-hot categorical (`state`) | None | None |
+| **Calibration** | Sigmoid (Platt) | Sigmoid (Platt) | Isotonic | Sigmoid (Platt) |
+| **Screening Threshold** | **0.212** (21.2%) | **~0.30 (artifact value 0.299)** | **0.026** (legacy) | **0.027** (legacy) |
+| **Threshold Rule** | Highest 0.001-grid threshold with dev CV sensitivity ≥ 75% | Same rule | Highest 0.001-grid threshold with OOF sensitivity ≥ 75% | Same rule |
 | **Artifact** | `models_v2/women_v2_pipeline.pkl` | `models_v2/men_v2_pipeline.pkl` | `models/women_production_pipeline.pkl` | `models/men_production_pipeline.pkl` |
 
 **Calibration & Risk Interpretation**:
 All probabilities are calibrated to reflect empirical prevalence of the research-defined target (**NFHS-5 diabetes-range status**) in the survey population, **not real-world individual clinical risk or lifetime incidence**. Calibrated probabilities serve purely as a screening / risk stratification metric across survey-reported profiles.
 
 **Model Selection Context**:
-- **Women (v2)**: The selected candidate `state_native_B` incorporates State as a native categorical marker in HistGradientBoosting with constrained tree complexity (`learning_rate=0.05, max_iter=200, max_leaf_nodes=15, min_samples_leaf=100, l2_regularization=1.0`).
-- **Men (v2)**: Logistic Regression candidate `lr_state` incorporates State as a one-hot categorical feature. It avoids tree overfitting across states with small sample sizes while offering transparent linear coefficients.
+- **Women (v2)**: LightGBM candidate `lgbm_D` was selected as the approved v2 model under the redefined target (development CV ROC-AUC 0.8016, PR-AUC 0.5829), top-tier among the benchmarked candidates; differences between the best candidates (~0.005 ROC-AUC) are within fold-to-fold variation.
+- **Men (v2)**: CatBoost candidate `cb_B` was selected as the approved v2 model under the redefined target (development CV ROC-AUC 0.8033, PR-AUC 0.6678), top-tier among the benchmarked candidates; differences between the best candidates (~0.005 ROC-AUC) are within fold-to-fold variation.
 - **Legacy v1**: The initial v1 models (preserved in `models/*.pkl`) did not include State as a predictor. They remain accessible for backward compatibility.
 
 ## Held-out test results (v1 vs v2)
+
+> [!NOTE]
+> The held-out test comparisons below evaluate v1 baselines against the intermediate v2 candidates (`state_native_B` and `lr_state`) under the original target definition.
+> The approved v2 production models (LightGBM `lgbm_D` for women and CatBoost `cb_B` for men) operate under the redefined target and were evaluated via 5-fold development cross-validation (~0.80 ROC-AUC); separate locked held-out test evaluation has not yet been conducted for them.
 
 Evaluated on the untouched cluster-held-out test split (PSU-grouped 80/20 split; zero cluster overlap between train and test). Both v1 and v2 pipelines were evaluated on the **exact same held-out test cohort**:
 - **Women held-out test set**: n = 86,669 (positive cases = 2,630; survey positive rate = 3.03%)

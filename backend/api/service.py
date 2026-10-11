@@ -36,7 +36,7 @@ SEX_IDS = {"women": "Female", "men": "Male"}
 
 @lru_cache(maxsize=4)
 def _test_metrics(version: str = "v2") -> dict:
-    """Read-only: headline held-out test metrics already recorded in reports/ (never recomputed)."""
+    """Read-only: headline development cross-validation metrics already recorded in reports/ (never recomputed)."""
     if version == "v2":
         prod_metrics_file = PROJECT_ROOT / "reports" / "v2" / "production_metrics.json"
         if prod_metrics_file.exists():

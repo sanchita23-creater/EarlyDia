@@ -59,6 +59,13 @@ def load_artifact(path) -> dict:
         with open(path, "rb") as fh:
             return _CompatUnpickler(fh).load()
     except (ModuleNotFoundError, AttributeError, ImportError, TypeError, ValueError) as exc:
+        missing = getattr(exc, "name", None) if isinstance(exc, ModuleNotFoundError) else None
+        if missing and missing.split(".")[0] not in ("sklearn", "_loss"):
+            raise RuntimeError(
+                f"Could not load model artifact '{path.name}': Python package '{missing.split('.')[0]}' "
+                f"is not installed. Run `pip install -r backend/requirements.txt` (or "
+                f"`pip install {missing.split('.')[0]}`)."
+            ) from exc
         try:
             import sklearn
             installed = sklearn.__version__

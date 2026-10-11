@@ -144,12 +144,12 @@ export default function Results() {
               <div><dt>Blood pressure handling</dt><dd>{t.bp_readings_handling}</dd></div>
               {t.state_used && <div><dt>State / UT context</dt><dd>{t.state_used} {t.state_provided === false ? "(national default)" : ""}</dd></div>}
               {m.roc_auc !== undefined && (
-                <div><dt>Held-out test metrics</dt>
-                  <dd>ROC-AUC {m.roc_auc} &bull; Sensitivity {(m.sensitivity * 100).toFixed(0)}% &bull; Specificity {(m.specificity * 100).toFixed(0)}% &bull; Precision {(m.ppv_precision * 100).toFixed(1)}%</dd></div>
+                <div><dt>Development cross-validation metrics</dt>
+                  <dd>Dev CV ROC-AUC {m.roc_auc} &bull; Sensitivity {(m.sensitivity * 100).toFixed(0)}% &bull; Specificity {(m.specificity * 100).toFixed(0)}% &bull; Precision (dev sample, prevalence 23&ndash;32%) {(m.ppv_precision * 100).toFixed(1)}%</dd></div>
               )}
             </dl>
 
-            <h3 className="tech-subhead">Approved Production Models &amp; Verified Benchmarks</h3>
+            <h3 className="tech-subhead">Approved Production Models &amp; Development Cross-Validation Benchmarks</h3>
             <p className="small">
               Verified against saved pipelines (<code>models_v2/</code>) and evaluation reports (<code>reports/v2/production_metrics.json</code>).
               Outdated experimental models (including earlier XGBoost candidates and v1 baselines) are deprecated in the model registry.
@@ -160,8 +160,8 @@ export default function Results() {
                   <tr>
                     <th scope="col">Cohort</th>
                     <th scope="col">Model Architecture</th>
-                    <th scope="col">ROC-AUC</th>
-                    <th scope="col">PR-AUC</th>
+                    <th scope="col">Dev CV ROC-AUC</th>
+                    <th scope="col">Dev CV PR-AUC</th>
                     <th scope="col">Cutoff</th>
                     <th scope="col">Sensitivity</th>
                     <th scope="col">Specificity</th>
@@ -193,9 +193,8 @@ export default function Results() {
               </table>
             </div>
             <p className="small">
-              <em>Benchmark comparison note:</em> For men, CatBoost <code>cb_B</code> demonstrated the highest discrimination (ROC-AUC 0.8033),
-              outperforming LightGBM (<code>lgbm_C</code> ROC-AUC 0.7988) and XGBoost (<code>xgb_D</code> ROC-AUC 0.8001; earlier <code>xgb_B</code> 0.6792).
-              For women, LightGBM <code>lgbm_D</code> was the top-performing model (ROC-AUC 0.8016).
+              <em>Benchmark comparison note:</em> For men, CatBoost <code>cb_B</code> (development cross-validation ROC-AUC 0.8033) was top-tier among benchmarked candidates (differences of ~0.005 ROC-AUC are within fold-to-fold variation).
+              For women, LightGBM <code>lgbm_D</code> was the top-performing model (development cross-validation ROC-AUC 0.8016).
             </p>
 
             <div className="evidence-section">
@@ -300,7 +299,7 @@ export default function Results() {
               <li><strong>Cluster-Grouped CV:</strong> 5-fold <code>StratifiedGroupKFold</code> grouped by Primary Sampling Unit (PSU) / survey cluster and stratified by outcome.</li>
               <li><strong>Spatial Leakage Protection:</strong> Participants from the same village/cluster never appear across both train and validation splits.</li>
               <li><strong>Calibration Selection:</strong> Sigmoid (Platt) scaling selected out-of-fold for reliable empirical alignment across risk percentiles.</li>
-              <li><strong>Locked Held-Out Test:</strong> Final test set used exactly once on held-out clusters, guarding against overfitting or threshold hunting.</li>
+              <li><strong>Development Validation:</strong> Evaluated via 5-fold PSU-grouped cross-validation on the development set; separate locked held-out test evaluation has not yet been conducted for v2 models.</li>
             </ul>
 
             <h3 className="tech-subhead">Risk Thresholds &amp; Gauge Categories</h3>

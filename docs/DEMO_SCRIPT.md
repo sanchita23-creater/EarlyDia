@@ -69,12 +69,12 @@ This script walks through a concise, 3-minute live demonstration of the EarlyDia
 1. **Examine Result Elements**:
    - **Probability**: Calibrated percentage output (e.g., `4.8%`).
    - **Status Pill**: "Flagged for follow-up" or "Lower screening likelihood".
-   - **Model & Cutoff**: Small meta line: `Model v2 - screening threshold 0.024` (or `0.029` for men).
+   - **Model & Cutoff**: Small meta line: `LightGBM / CatBoost (v2) - screening decision threshold 21.2% (women) and ~30% (men; artifact value 29.9%)`.
    - **State Disclosure**: Note stating `State used: <State Name>. State is a regional marker from NFHS-5, not a cause of risk.`
-   - **Interactive Technical Details**: Expand the accordion to view held-out test ROC-AUC, sensitivity, specificity, and calibration methodology.
+   - **Interactive Technical Details**: Expand the accordion to view development cross-validation ROC-AUC (5-fold PSU-grouped OOF), sensitivity, specificity, and calibration methodology.
 2. **Key points to say (What the result DOES and DOES NOT mean)**:
-   - **What it IS**: "The calibrated probability reflects statistical alignment with the research-defined NFHS-5 diabetes-range group (self-reported diagnosis or random blood glucose ≥ 200 mg/dL) at the chosen sensitivity-oriented cutoff (≥ 75% target sensitivity on training data)."
+   - **What it IS**: "The calibrated probability reflects statistical alignment with the research-defined NFHS-5 diabetes-range group (self-reported diagnosis or valid blood glucose ≥ 141 mg/dL) at the chosen sensitivity-oriented cutoff (≥ 75% sensitivity floor on dev folds)."
    - **What it is NOT**: "This does NOT mean the user has diabetes. It does not predict lifetime risk. It is not an alternative to clinical tests like HbA1c or fasting plasma glucose."
-   - **Why PPV is modest**: "Because population prevalence in this 18–40 cohort is ~3.0–3.3%, any sensitive screening threshold inherently produces a low Positive Predictive Value (~4.7–4.9%) and many false alarms. That trade-off is documented and transparent."
+   - **Why PPV depends on sample definition**: "PPV ~43% (women) / ~54% (men) applies only to the redefined development sample (prevalence ~23% women, ~32% men; the 101–140 mg/dL group excluded). On the original-target held-out test, v1 PPV was ~4.4% (women) / ~4.5% (men), and the true population prevalence is ~3%. A flagged result requires formal diagnostic laboratory confirmation, not an assumption of disease."
 3. **Conclusion**:
    - "EarlyDia demonstrates rigorous ML engineering under clustered survey conditions: cluster-aware splitting, out-of-fold calibration, honest metric reporting, and safe product design."

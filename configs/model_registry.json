@@ -88,7 +88,7 @@
     "threshold": 0.212,
     "calibration_method": "sigmoid",
     "status": "approved",
-    "notes": "LightGBM lgbm_D, Test ROC-AUC 0.8016"
+    "notes": "LightGBM lgbm_D, Dev CV ROC-AUC (5-fold PSU-grouped OOF, redefined target; not held-out) 0.8016"
   },
   "v2_men_cb_B": {
     "model_id": "v2_men_cb_B",
@@ -101,6 +101,6 @@
     "threshold": 0.300,
     "calibration_method": "sigmoid",
     "status": "approved",
-    "notes": "CatBoost cb_B, Test ROC-AUC 0.8033"
+    "notes": "CatBoost cb_B, Dev CV ROC-AUC (5-fold PSU-grouped OOF, redefined target; not held-out) 0.8033"
   }
 }
